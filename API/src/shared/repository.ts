@@ -1,7 +1,7 @@
 export interface Repository<T> {
-  findAll(): T[] | undefined
-  findOne(item: { id: string }): T | undefined
-  add(item: T): T | undefined
-  update(item: T): T | undefined
-  delete(item: { id: string }): T | undefined
+  findAll(): Promise<T[] | undefined>
+  findOne(vaccine: {id: string}): Promise<T | undefined>
+  add(vaccine: T): Promise<T | undefined>
+  update(id: string, vaccine: T): Promise<T | undefined>
+  delete(vaccine: {id:string}): Promise<T | undefined>
 }
