@@ -54,3 +54,14 @@ CREATE TABLE `observations` (
   CONSTRAINT `fk_observation_medicalHistory` FOREIGN KEY (`medicalHistoryId`) REFERENCES `medicalhistories` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+CREATE TABLE `professionals` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `dni` INT UNSIGNED NULL,
+  `name` VARCHAR(255) NULL,
+  `lastname` VARCHAR(255) NULL,
+  `adress` VARCHAR(255) NULL,
+  `phone_number` INT UNSIGNED NULL,
+  `mail` VARCHAR(255) NULL,
+  `birthdate` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`));
+);
