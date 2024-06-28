@@ -1,6 +1,6 @@
-import { repository } from "../shared/repository.js";
+import { Repository } from "../shared/repository.js";
 import { Professional } from "./professionals.entity.js";
-import { pool } from "../shared/db/conn.mysql.js";
+import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 /*const professionals = [
@@ -16,7 +16,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
     ),
 ]*/
 
-export class ProfessionalRepository implements repository<Professional>{
+export class ProfessionalRepository implements Repository<Professional>{
     public async findAll(): Promise<Professional[] | undefined> {
         const [professionals] = await pool.query('select * from professionals')
         return professionals as Professional[]
