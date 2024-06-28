@@ -31,7 +31,7 @@ async function findAll(req:Request, res:Response){  //Obtiene todos los professi
 
 async function findOne(req:Request, res:Response) {  //Obtiene UN professional de professionals
     const id = req.params.id
-    const professional = await repository.findONe({id})
+    const professional = await repository.findOne({id})
     if (!professional) {
       return res.status(404).send({ message: 'Professional not found' })
     }
