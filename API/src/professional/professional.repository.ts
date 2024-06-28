@@ -48,7 +48,7 @@ export class ProfessionalRepository implements repository<Professional>{
     }
     public async delete(item:{id: string; }): Promise<Professional | undefined>{
         try {
-        const professionalToDelete =await this.findONe(item);
+        const professionalToDelete =await this.findOne(item);
         const professionallId = Number.parseInt(item.id)
         await pool.query('delete from professionals where id = ?', professionalId)
         return professionalToDelete;
