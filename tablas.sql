@@ -1,8 +1,8 @@
-create database if not exists heroclash4geeks;
+create database if not exists veterinaria;
 
-use heroclash4geeks;
+use veterinaria;
 create user if not exists dsw@'%' identified by 'dsw';
-grant select, update, insert, delete on heroclash4geeks.* to dsw@'%';
+grant select, update, insert, delete on veterinaria.* to dsw@'%';
 
 CREATE TABLE `clients` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
