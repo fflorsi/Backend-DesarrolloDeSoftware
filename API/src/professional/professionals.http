@@ -13,10 +13,9 @@ Content-Type: application/json
     "lastname": "Traverso",
     "name": "Juan Maria",
     "adress": "El cielito",
-    "phone_number": "341971",
+    "phone_number": 341971,
     "mail": "jmtraverso@gmail.com",
-    "birth_date":"28/12/1950",
-    "id": "2"
+    "birthdate":"28/12/1950",
 }
 
 ### Modificar un professional (put - recurso completo e idempotente) - FUNCIONA CON ID
@@ -28,10 +27,9 @@ Content-Type: application/json
     "lastname": "Larroquette",
     "name": "Juani",
     "adress": "Maipu 1212",
-    "phone_number": "3400 533008",
+    "phone_number": 3400533008,
     "mail": "juan@gmail.com",
-    "birth_date":"8/8/2002",
-    "id": "98"
+    "birthdate":"8/8/2002",
 }
 
 ### Modificar un professional (patch - recurso parcial ) - NO FUNCIONA CON ID
