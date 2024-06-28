@@ -6,26 +6,46 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export class MedicalHistoryRepository implements Repository<MedicalHistory>{
 
-  public async findAll(): Promise<MedicalHistory[] | undefined> {
-    const [medicalHistories] = await pool.query('select * from medicalhistories')
-    for (const medicalHistory of medicalHistories as MedicalHistory[]){
-      const [vaccines] = await pool.query('select vaccineId from medicalhistories_vaccines where medicalHistoryId = ?',[medicalHistory.id])
-      medicalHistory.vaccines = (vaccines as {vaccineId: number}[]).map((vaccine)=>vaccine.vaccineId)
-      };
-    return medicalHistories as MedicalHistory[]
+//Se deberia modificar para traer mascotas en ves de id de mascota
+public async findAll(): Promise<MedicalHistory[] | undefined> {
+    const [medicalHistories] = await pool.query('SELECT * FROM medicalhistories');
+    for (const medicalHistory of medicalHistories as MedicalHistory[]) {
+        const [vaccineIds] = await pool.query('SELECT vaccineId FROM medicalhistories_vaccines WHERE medicalHistoryId = ?', [medicalHistory.id]);
+        const vaccines = [];
+        for (const vaccineIdObj of vaccineIds as {vaccineId: number}[]) {
+            const [vaccine] = await pool.query<RowDataPacket[]>('SELECT * FROM vaccines WHERE id = ?', [vaccineIdObj.vaccineId]);
+            if (vaccine.length > 0) {
+                vaccines.push(vaccine[0]);
+            }
+        }
+        medicalHistory.vaccines = vaccines;
     }
+    return medicalHistories as MedicalHistory[];
+}
 
-  public async findOne(vaccine: {id: string }): Promise<MedicalHistory | undefined> {
-    const id = Number.parseInt(vaccine.id)
-    const [medicalHistories] = await pool.query<RowDataPacket[]>('select * from medicalhistories where id = ?', [id])
-    if(medicalHistories.length === 0){
-      return undefined
+//Se deberia modificar para traer mascotas en ves de id de mascota
+public async findOne(vaccine: {id: string}): Promise<MedicalHistory | undefined> {
+    const id = Number.parseInt(vaccine.id);
+    const [medicalHistories] = await pool.query<RowDataPacket[]>('SELECT * FROM medicalhistories WHERE id = ?', [id]);
+    
+    if (medicalHistories.length === 0) {
+        return undefined;
     }
-    const medicalHistory = medicalHistories[0] as MedicalHistory
-    const [vaccines] = await pool.query('select vaccineId from medicalhistories_vaccines where medicalHistoryId = ?',[medicalHistory.id])
-    medicalHistory.vaccines = (vaccines as {vaccineId: number}[]).map((vaccine)=>vaccine.vaccineId)
-    return medicalHistory
-  }
+    
+    const medicalHistory = medicalHistories[0] as MedicalHistory;
+    const [vaccineIds] = await pool.query('SELECT vaccineId FROM medicalhistories_vaccines WHERE medicalHistoryId = ?', [medicalHistory.id]);
+    
+    const vaccines = [];
+    for (const vaccineIdObj of vaccineIds as {vaccineId: number}[]) {
+        const [vaccine] = await pool.query<RowDataPacket[]>('SELECT * FROM vaccines WHERE id = ?', [vaccineIdObj.vaccineId]);
+        if (vaccine.length > 0) {
+            vaccines.push(vaccine[0]);
+        }
+    }
+    medicalHistory.vaccines = vaccines;
+    
+    return medicalHistory;
+}
 
   public async add(medicalHistoryInput: MedicalHistory): Promise<MedicalHistory | undefined> {
     const {id, vaccines, ...medicalHistoryRow} = medicalHistoryInput
