@@ -46,4 +46,14 @@ export class ClientRepository implements Repository<Client> {
       return deletedClients
     }
   }
+  //probablemente se borre despues
+  public async findClientByDni(dni: string): Promise<Client | undefined> {
+  const [clients] = await pool.query<RowDataPacket[]>('SELECT * FROM clients WHERE dni = ?', [dni]);
+    if (clients.length === 0) {
+      return undefined;
+    }
+  return clients[0] as Client;
+  }
+  
+}
 }
