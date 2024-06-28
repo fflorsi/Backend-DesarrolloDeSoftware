@@ -76,4 +76,24 @@ function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeClientInput, findAll, findOne, add, update, remove }
+//probablemente se borre despues 
+async function findClientAndPetsByDni(req: Request, res: Response) {
+  const { dni } = req.params;
+  const petRepository = new PetRepository()
+  try {
+    const client = await repository.findClientByDni(dni);
+    if (!client) {
+      return res.status(404).send({ message: 'Client not found' });
+    }
+    if (typeof client.id === 'undefined'){
+      return res.status(404).send({ message: 'Client ID is undefined' });
+    }//hay q ver esto porque se supone q no deberia poder ser undefined
+    const pets = await petRepository.findByClientId(client.id.toString());
+    return res.status(200).json({ ownerData:client, petData:pets });
+    }catch (error) {
+    console.error('Error finding client and pets:', error);
+    return res.status(500).send({ message: 'Failed to find client and pets' });
+  }
+}
+
+export { sanitizeClientInput, findAll, findOne, add, update, remove, findClientAndPetsByDni}
