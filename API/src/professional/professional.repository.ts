@@ -22,7 +22,7 @@ export class ProfessionalRepository implements repository<Professional>{
         return professionals as Professional[]
     }
 
-    public async findONe(item:{id: string}): Promise<Professional | undefined> {
+    public async findOne(item:{id: string}): Promise<Professional | undefined> {
         const id = Number.parseInt(item.id)
         const [professionals] = await pool.query<RowDataPacket[]>('select * from professionals where id = ?', [id])
         if(professionals.length ===0){
@@ -34,23 +34,23 @@ export class ProfessionalRepository implements repository<Professional>{
     }
 
     public async add(professionalInput: Professional): Promise<Professional | undefined> {
-        const {id, lastname,...professionalRow} = professionalInput
+        const {id,...professionalRow} = professionalInput
         const [result] =  await pool.query<ResultSetHeader>('insert into professionals set ?', [professionalRow]) 
         professionalInput.id=result.insertId
         return professionalInput
     }
  
     public  async update(id:string, professionalInput: Professional): Promise<Professional | undefined> {
-        const professinalId = Number.parseInt(id)
+        const professionalId = Number.parseInt(id)
         const {...professionalRow} = professionalInput
-        await pool.query('update professionals set ? where id = ?', [professionalRow, professinalId] )
+        await pool.query('update professionals set ? where id = ?', [professionalRow, professionalId] )
         return professionalInput 
     }
     public async delete(item:{id: string; }): Promise<Professional | undefined>{
         try {
         const professionalToDelete =await this.findONe(item);
-        const professinalId = Number.parseInt(item.id)
-        await pool.query('delete from professionals where id = ?', professinalId)
+        const professionallId = Number.parseInt(item.id)
+        await pool.query('delete from professionals where id = ?', professionalId)
         return professionalToDelete;
         } catch (error: any){
             throw new Error('Unable to delete professional')
