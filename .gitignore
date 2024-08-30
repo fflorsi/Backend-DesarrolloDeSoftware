@@ -5,6 +5,7 @@ coverage
 
 #dependency directories
 node_modules
+api
 
 #OS metadata
 .OS_Store
