@@ -1,6 +1,10 @@
 DROP SCHEMA IF EXISTS `veterinaria` ;
 CREATE SCHEMA IF NOT EXISTS `veterinaria`; 
 
+
+//no estan en orden perdonenme 
+
+  
 CREATE TABLE IF NOT EXISTS `veterinaria`.`clients` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `dni` VARCHAR(10) NOT NULL,
