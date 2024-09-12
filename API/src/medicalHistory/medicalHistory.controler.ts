@@ -69,4 +69,14 @@ async function remove(req: Request, res: Response){
   }
 }
 
-export { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove }
+async function findByPetId(req: Request, res: Response) {
+  const id = req.params.id
+  const medicalHistory = await repository.findOne({id})
+  if(!medicalHistory){
+    return res.status(404).send({message:'Medical History Not Found'})
+  }
+  res.json({data: medicalHistory})
+
+}
+
+export { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove, findByPetId }
