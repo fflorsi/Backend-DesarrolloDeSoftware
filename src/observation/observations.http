@@ -1,0 +1,42 @@
+### obtener todas las observations de observations
+GET http://localhost:3000/api/observations
+
+### Obtener una observation de observations 
+GET http://localhost:3000/api/observations/1
+
+###Crear nueva observation en observations 
+POST http://localhost:3000/api/observations
+Content-Type: application/json
+
+{
+    "name": "auchis",
+    "dificultyLevel": "50000",
+    "materialsUsed": "69",
+    "description": "aia",
+    "datePerformed": "26/06/2024"
+}
+
+### Modificar una observation 
+PUT http://localhost:3000/api/observations/001
+Content-Type: application/json
+
+{
+    "name": "apendicitis",
+    "dificultyLevel": "6",
+    "materialsUsed": "9",
+    "description": "removal of the apendix",
+    "datePerformed": "01/06/2024"
+}
+
+### Modificar una observation 
+PATCH  http://localhost:3000/api/observations/001
+Content-Type: application/json
+
+{
+    "name": "apendicitis",
+    "description": "removal of the apendix",
+    "datePerformed": "01/06/2024"
+}
+
+### Borrar una observation 
+DELETE http://localhost:3000/api/observations/001
