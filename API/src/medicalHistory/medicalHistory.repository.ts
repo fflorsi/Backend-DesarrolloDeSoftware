@@ -2,6 +2,7 @@ import { Repository } from "../shared/repository.js";
 import { MedicalHistory } from "./medicalHistory.entity.js";
 import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { observation } from "../observation/observations.entity.js";
 
 
 export class MedicalHistoryRepository implements Repository<MedicalHistory>{
@@ -9,25 +10,35 @@ export class MedicalHistoryRepository implements Repository<MedicalHistory>{
   public async findAll(): Promise<MedicalHistory[] | undefined> {
     const [medicalHistories] = await pool.query('select * from medicalhistories')
     for (const medicalHistory of medicalHistories as MedicalHistory[]){
-      const [vaccines] = await pool.query('select vaccineId from medicalhistories_vaccines where medicalHistoryId = ?',[medicalHistory.id])
-      medicalHistory.vaccines = (vaccines as {vaccineId: number}[]).map((vaccine)=>vaccine.vaccineId)
-      const [observations] = await pool.query('select id from observations where medicalHistoryId = ?',[medicalHistory.id])
-      medicalHistory.observations = (observations as {id: number}[]).map((observation)=>observation.id)
+      const [vaccines] = await pool.query('select v.name from medicalhistories_vaccines mhv inner join vaccines v on mhv.vaccineId = v.id where medicalHistoryId = ?',[medicalHistory.id])
+      for(const vaccine of vaccines as any[]){
+      medicalHistory.vaccines.map(vaccine)}
+      const [observations] = await pool.query('select * from observations where medicalHistoryId = ?',[medicalHistory.id])
+      medicalHistory.observations = (observations as {id: observation}[]).map((observation)=>observation.id)
       };
     return medicalHistories as MedicalHistory[]
     }
 
   public async findOne(petId: {id: string }): Promise<MedicalHistory | undefined> {
     const id = Number.parseInt(petId.id)
-    const [medicalHistories] = await pool.query<RowDataPacket[]>('select * from medicalhistories where petId = ?', [id])
+    const [medicalHistories] = await pool.query<RowDataPacket[]>('select id from medicalhistories where petId = ?', [id])
     if(medicalHistories.length === 0){
       return undefined
     }
     const medicalHistory = medicalHistories[0] as MedicalHistory
-    const [vaccines] = await pool.query('select vaccineId from medicalhistories_vaccines where medicalHistoryId = ?',[medicalHistory.id])
-    medicalHistory.vaccines = (vaccines as {vaccineId: number}[]).map((vaccine)=>vaccine.vaccineId)
-    const [observations] = await pool.query('select id from observations where medicalHistoryId = ?',[medicalHistory.id])
-    medicalHistory.observations = (observations as {id: number}[]).map((observation)=>observation.id)
+    const [vaccines] = await pool.query<RowDataPacket[]>(
+        'SELECT v.name FROM medicalhistories_vaccines mhv INNER JOIN vaccines v ON mhv.vaccineId = v.id WHERE medicalHistoryId = ?',
+        [medicalHistory.id]
+    )
+    medicalHistory.vaccines = vaccines.map((vaccine) => vaccine.name);
+    const [observations] = await pool.query<RowDataPacket[]>(
+        'SELECT observation, datePerformed, name FROM observations WHERE medicalHistoryId = ?',
+        [medicalHistory.id])
+    medicalHistory.observations = observations.map((observation) => ({
+        observation: observation.observation,
+        datePerformed: observation.datePerformed,
+        name: observation.name
+    }));
     return medicalHistory
   }
 
@@ -35,7 +46,7 @@ export class MedicalHistoryRepository implements Repository<MedicalHistory>{
     const {id, vaccines, ...medicalHistoryRow} = medicalHistoryInput
     const [result] = await pool.query<ResultSetHeader>('insert into medicalHistories set ?', [medicalHistoryRow])
     medicalHistoryInput.id = result.insertId
-    for (const vaccine of vaccines){
+    for (const vaccine of [vaccines]){
       await pool.query('insert into medicalHistories_vaccines set ?',{medicalHistoryId: medicalHistoryInput.id, vaccineId: vaccine})
     }
     return medicalHistoryInput
@@ -48,8 +59,8 @@ export class MedicalHistoryRepository implements Repository<MedicalHistory>{
     
     await pool.query('delete from medicalHistories_vaccines where medicalHistoryId = ?', [medicalHistoryId])
   
-    if(vaccines?.length>0){
-      for (const vaccineId of vaccines){
+    if([vaccines]?.length>0){
+      for (const vaccineId of [vaccines]){
         await pool.query('insert into medicalHistories_vaccines set ?',{medicalHistoryId,vaccineId})
       }
     }
