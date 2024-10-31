@@ -1,0 +1,6 @@
+### Registrar Usuario
+POST http://localhost:3000/api/users
+
+###Login Usuario
+
+POST http://localhost:3000/api/users/login

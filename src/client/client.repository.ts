@@ -1,63 +1,74 @@
-import { Repository } from '../shared/repository.js'
-import { Client} from './client.entity.js'
-import { pool } from '../shared/db/conn.js'
-import { ResultSetHeader, RowDataPacket } from 'mysql2'
+import { Client as ClientModel } from './client.model.js'; // Importar modelo Sequelize
+import { Client, Client as ClientInterface } from './client.entity.js'; // Importar la interfaz
 
-
-
-export class ClientRepository implements Repository<Client> {
-  public async findAll(): Promise<Client[] | undefined> {
-    const [clients] = await pool.query('select * from clients')
-  return clients as Client[]
-}
-
-  public async findOne(item: { id: string }): Promise<Client | undefined> {
-  const id = Number.parseInt(item.id);
-  if (isNaN(id)) {
-    return undefined; // Opcional: manejar este caso específico en el repositorio
-  }
-  const [clients] = await pool.query<RowDataPacket[]>('SELECT * FROM clients WHERE id = ?', [id]);
-  if (clients.length === 0) {
-    return undefined;
-  }
-  const client = clients[0] as Client;
-  return client;
-}
-
-
-   public async add(clientInput: Client): Promise<Client | undefined> {
-    const { id, ...clientRow } = clientInput
-    const [result] = await pool.query<ResultSetHeader>('insert into clients set ?', [clientRow])
-    clientInput.id = result.insertId
-    
-
-    return clientInput
-  }
-
-  public async update(id: string, clientInput: Client): Promise<Client | undefined> {
-    const clientId = Number.parseInt(id)
-    const {  ...clientRow } = clientInput
-    await pool.query('update clients set ? where id = ?', [clientRow, clientId])
-    return await this.findOne({ id })
-  }
-
-public async delete(item: { id: string }): Promise<Client | undefined> {
-    try {
-      const clientToDelete = await this.findOne(item)
-      const clientId = Number.parseInt(item.id)
-      await pool.query('delete from clients where id = ?', clientId)
-      return clientToDelete
-    } catch (error: any) {
-      throw new Error('unable to delete client')
-    }
-  }
+export class ClientRepository {
   
+  // Obtener todos los clientes
+  public async findAll(): Promise<ClientInterface[]> {
+    const clients = await ClientModel.findAll();
+    return clients.map(client => client.toJSON() as ClientInterface); // Convertir a JSON
+  }
 
-  public async findClientAndPetsByDni(dni: string): Promise<Client | undefined> {
-    const [clients] = await pool.query<RowDataPacket[]>('SELECT * FROM clients WHERE dni = ?', [dni]);
-    if (clients.length === 0) {
-        return undefined;
+  // Obtener un cliente por ID
+  public async findOne(item: { id: string }): Promise<ClientInterface | null> {
+    const id = Number.parseInt(item.id);
+    if (isNaN(id)) return null; // Cambiar undefined por null
+    const client = await ClientModel.findByPk(id);
+    return client ? (client.toJSON() as ClientInterface) : null; // Manejo de null
+  }
+
+  // Añadir un cliente
+  public async add(clientInput: ClientInterface): Promise<ClientInterface> {
+    const newClient = await ClientModel.create(clientInput);
+    return newClient.toJSON() as ClientInterface; // Convertir a JSON
+  }
+
+  // Actualizar un cliente
+  public async update(id: string, clientInput: ClientInterface): Promise<ClientInterface | null> {
+    const clientId = Number.parseInt(id);
+
+    if (isNaN(clientId)) return null;
+
+    try {
+        // Perform the update
+        const [rowsUpdated] = await ClientModel.update(clientInput, {
+            where: { id: clientId },
+        });
+
+        console.log(`Rows updated: ${rowsUpdated}`);
+
+        // If no rows were updated, return null
+        if (rowsUpdated === 0) return null;
+
+        // Fetch the updated instance
+        const updatedClient = await ClientModel.findByPk(clientId);
+        if (!updatedClient) return null;
+
+        return updatedClient.toJSON() as ClientInterface;
+    } catch (error) {
+        console.error('Error during update:', error);
+        return null;
     }
-    return clients[0] as Client;
 }
+
+
+
+
+
+  // Borrar un cliente
+  public async delete(item: { id: string }): Promise<ClientInterface | null> {
+    const clientToDelete = await this.findOne(item);
+    if (!clientToDelete) return null; // Cambiar undefined por null
+    await ClientModel.destroy({ where: { id: clientToDelete.id } });
+    return clientToDelete; // Devuelve el cliente eliminado
+  }
+
+  // Obtener un cliente y sus mascotas por DNI
+  public async findClientAndPetsByDni(dni: string): Promise<ClientInterface | null> {
+    const client = await ClientModel.findOne({ 
+      where: { dni }, 
+      include: ['pets'] // Asegúrate de que esta relación esté definida en tu modelo
+    });
+    return client ? (client.toJSON() as ClientInterface) : null; // Manejo de null
+  }
 }

@@ -3,7 +3,7 @@ GET http://localhost:3000/api/clients
 
 
 ### obtener un cliente
-GET http://localhost:3000/api/clients/1
+GET http://localhost:3000/api/clients/
 
 
 
@@ -18,14 +18,14 @@ Content-Type: application/json
   "address": "Mitre 1430",
   "phone": "34163493854",
   "email": "masche494@gmail.com",
-  "registrationDate": "30/08/2003"
+  "birthDate": "30/08/2003"
 }
 
 
 
 
 ### modificar un cliente (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/clients/1
+PUT http://localhost:3000/api/clients/
 Content-Type: application/json
 
 {
@@ -35,11 +35,11 @@ Content-Type: application/json
   "address": "3 de febrero 377",
   "phone": "3416470473",
   "email": "fnmunne@frro.ar",
-  "registrationDate": "08/12/2002"
+  "birthDate": "08/12/2002"
 }
 
 ### modificar un cliente (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/clients/4
+PATCH http://localhost:3000/api/clients/
 Content-Type: application/json
 
 {
@@ -52,4 +52,4 @@ Content-Type: application/json
 DELETE http://localhost:3000/api/clients/
 
 ### obtener cliente por dni
-GET http://localhost:3000/api/clients/by-dni/44523096
+GET http://localhost:3000/api/clients/by-dni/

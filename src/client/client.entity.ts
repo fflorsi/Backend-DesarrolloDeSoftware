@@ -6,7 +6,7 @@ export class Client {
     public address: string,
     public phone: string,
     public email: string,
-    public registrationDate: string,
+    public birthDate: Date,
     public id?: number
   ) {}
 }

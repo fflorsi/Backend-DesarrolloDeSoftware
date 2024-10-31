@@ -7,6 +7,6 @@ clientRouter.get('/', findAll)
 clientRouter.get('/:id', findOne)
 clientRouter.post('/', sanitizeClientInput, add)
 clientRouter.put('/:id', sanitizeClientInput, update)
-clientRouter.patch('/:id', sanitizeClientInput, update)
 clientRouter.delete('/:id', remove)
 clientRouter.get('/by-dni/:dni', findClientAndPetsByDni);
+

@@ -13,7 +13,7 @@ function sanitizeClientInput(req: Request, res: Response, next: NextFunction) {
     address: req.body.address,
     phone: req.body.phone,
     email: req.body.email,
-    registrationDate: req.body.registrationDate,
+    birthDate: req.body.birthDate,
   };
   //more checks here
 
@@ -52,7 +52,7 @@ async function add(req: Request, res: Response) {
     input.address,
     input.phone,
     input.email,
-    input.registrationDate,
+    input.birthDate,
   );
 
   try {
@@ -65,26 +65,37 @@ async function add(req: Request, res: Response) {
 }
 
 async function update(req: Request, res: Response) {
-  const client = await repository.update(req.params.id, req.body.sanitizedInput)
-
-  if (!client) {
-    return res.status(404).send({ message: 'Client not found' })
+  try {
+    // Verificación adicional para asegurarse de que los datos estén completos
+    const clientInput = req.body.sanitizedInput;
+  if (!clientInput) {
+    return res.status(400).send({ message: 'Input data is missing or invalid' });
   }
 
-  return res.status(200).send({ message: 'Client updated successfully', data: client })
+    const client = await repository.update(req.params.id, clientInput);
+    if (!client) {
+      return res.status(404).send({ message: 'Client not found' });
+    }
+
+    return res.status(200).send({ message: 'Client updated successfully', data: client });
+  } catch (error:any) {
+    console.error('Error updating client:', error.message || error);
+    return res.status(500).send({ message: 'Failed to update client', error: error.message });
+  }
 }
+
+
 
 async function remove(req: Request, res: Response) {
   const { id } = req.params;
-  const client = await repository.delete({ id })
+  const client = await repository.delete({ id });
 
   if (!client) {
-    res.status(404).send({ message: 'Client not found' })
-  } else {
-    res.status(200).send({ message: 'Client deleted successfully' })
+    return res.status(404).send({ message: 'Client not found' });
   }
-
+  return res.status(200).send({ message: 'Client deleted successfully' });
 }
+
 
 async function findClientAndPetsByDni(req: Request, res: Response) {
   const { dni } = req.params;
