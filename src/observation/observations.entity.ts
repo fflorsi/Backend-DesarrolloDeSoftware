@@ -3,10 +3,9 @@ import crypto from 'node:crypto'
 export class observation{
     constructor(
         public name: string,
-        public dificultyLevel: number, 
-        public materialsUsed: number,
+        public professional: number,
         public description: string,
-        public datePerformed: string,
-        public id?: number,
+        public medicalhistoryId: number,
+        public id?: number
      ) {}
 }
