@@ -3,20 +3,14 @@ import { MedicalHistory } from "./medicalHistory.entity.js";
 import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { observation } from "../observation/observations.entity.js";
+import { MedicalHistory as MedicalHistoryModel } from "./medicalHistory.model.js";
 
 
 export class MedicalHistoryRepository implements Repository<MedicalHistory>{
 
   public async findAll(): Promise<MedicalHistory[] | undefined> {
-    const [medicalHistories] = await pool.query('select * from medicalhistories')
-    for (const medicalHistory of medicalHistories as MedicalHistory[]){
-      const [vaccines] = await pool.query('select v.name from medicalhistories_vaccines mhv inner join vaccines v on mhv.vaccineId = v.id where medicalHistoryId = ?',[medicalHistory.id])
-      for(const vaccine of vaccines as any[]){
-      medicalHistory.vaccines.map(vaccine)}
-      const [observations] = await pool.query('select * from observations where medicalHistoryId = ?',[medicalHistory.id])
-      medicalHistory.observations = (observations as {id: observation}[]).map((observation)=>observation.id)
-      };
-    return medicalHistories as MedicalHistory[]
+    const medicalHistories = await MedicalHistoryModel.findAll()
+    return medicalHistories.map(medicalHistory => medicalHistory.toJSON() as MedicalHistory)
     }
 
   public async findOne(petId: {id: string }): Promise<MedicalHistory | undefined> {

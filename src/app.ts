@@ -8,6 +8,13 @@ import { professionalRouter } from "./professional/professional.routes.js"
 import { observationRouter } from "./observation/observation.routes.js"
 import { userRouter } from "./user/user.routes.js";
 import { productRouter } from "./product/product.routes.js";
+import { Type } from "./types/type.model.js";
+import { Pet } from "./pet/pet.model.js";
+import { MedicalHistory } from "./medicalHistory/medicalHistory.model.js";
+import { Observation } from "./observation/observation.model.js";
+import { Professional } from "./professional/professional.model.js";
+import { Vaccine } from "./vaccine/vaccine.model.js";
+import { MedicalHistory_Vaccine } from "./medicalHistory/medicalHistory_vaccine.model.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -48,6 +55,13 @@ app.use((req, res) => {
 // Sincronización de modelos con la base de datos
 (async () => {
   try {
+    await MedicalHistory.sync()
+    await Professional.sync()
+    await Observation.sync()
+    await Type.sync()
+    await Pet.sync()
+    await Vaccine.sync()
+    await MedicalHistory_Vaccine.sync()
     await sequelize.sync(); // Sincroniza todos los modelos con la base de datos
     console.log("Tablas sincronizadas correctamente");
 
