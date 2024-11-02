@@ -5,7 +5,7 @@ export class observation{
         public name: string,
         public professional: number,
         public description: string,
-        public medicalhistoryId: number,
+        public medicalHistoryId: number,
         public id?: number
      ) {}
 }
