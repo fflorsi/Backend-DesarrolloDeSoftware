@@ -41,10 +41,9 @@ async function add(req:Request, res:Response) {
 
     const observationInput = new observation(
         input.name,
-        input.dificultyLevel,
-        input.materialsUsed,
+        input.professional,
         input.description,
-        input.datePerformed,
+        input.medicalhistoryId,
         input.id
     )
 

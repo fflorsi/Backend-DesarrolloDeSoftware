@@ -2,30 +2,26 @@ import { Repository } from "../shared/repository.js";
 import { observation } from "./observations.entity.js";
 import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { Observation as ObservationModel } from "./observation.model.js";
 
 
-export class observationRepository implements Repository<observation>{
-    public async findAll(): Promise<observation[] | undefined> {
-        const [observations] = await pool.query('select * from observations')
-        return observations as observation[]
+export class observationRepository{
+    public async findAll(): Promise<observation[]> {
+        const observations = await ObservationModel.findAll()
+        return observations.map(observation => observation.toJSON() as observation)
     }
 
     public async findOne(item:{id: string}): Promise<observation | undefined> {
         const id = Number.parseInt(item.id)
-        const [observations] = await pool.query<RowDataPacket[]>('select * from observations where id = ?', [id])
-        if(observations.length ===0){
-            return undefined
-        }
-        const observation = observations[0] as observation
+        if (isNaN(id)) return undefined
+        const observation = await ObservationModel.findByPk(id)
 
-        return observation
+        return observation ? (observation.toJSON()) : undefined
     }
 
-    public async add(observationInput: observation): Promise<observation | undefined> {
-        const {id,...observationRow} = observationInput
-        const [result] =  await pool.query<ResultSetHeader>('insert into obvservations set ?', [observationRow]) 
-        observationInput.id = result.insertId
-        return observationInput
+    public async add(observationInput: any): Promise<observation> {
+        const newObservation = await ObservationModel.create(observationInput)
+        return newObservation.toJSON() as observation
     }
  
     public async update(id:string, observationInput: observation): Promise<observation | undefined> {
