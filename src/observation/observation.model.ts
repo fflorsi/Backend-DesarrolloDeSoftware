@@ -1,38 +1,62 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes,Model,Optional } from 'sequelize';
 import sequelize from '../db/connection.js';
 
-export const Observation = sequelize.define('observation', {
-    id: {
+
+interface ObservationAttributes{
+    id?:number
+    name: string
+    professional: number
+    description: string
+    medicalHistoryId: number
+}
+
+interface ObservationCreationAttributes extends Optional<ObservationAttributes,'id'>{}
+
+export class Observation extends Model<ObservationAttributes,ObservationCreationAttributes> implements ObservationAttributes{
+    public id!: number
+    public name!: string
+    public professional!: number
+    public description!: string
+    public medicalHistoryId!: number
+
+}
+
+Observation.init(
+    {
+      id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
-    },
-    name: {
+        autoIncrement: true,
+      },
+      name: {
         type: DataTypes.STRING,
-        allowNull: false
-    },
-    professional: {
+        allowNull: false,
+      },
+      professional: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references:{
-          model: 'professionals',
-          key: 'id'
-        }
-    },
-    description: {
+        references: {
+          model: 'professionals', // Debe coincidir con el nombre de la tabla relacionada
+          key: 'id',
+        },
+      },
+      description: {
         type: DataTypes.STRING,
-        allowNull: false
-    },
-      medicalHistoryId: {  
+        allowNull: false,
+      },
+      medicalHistoryId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {  // Definir la relación
-            model: 'medicalHistories',  
-            key: 'id'  
-        }
+        references: {
+          model: 'medicalHistories', // Debe coincidir con el nombre de la tabla relacionada
+          key: 'id',
+        },
+      },
+    },
+    {
+      timestamps: true, // Habilita createdAt y updatedAt
+      tableName: 'observations', // Especifica el nombre de la tabla
+      sequelize, // Asegúrate de pasar la instancia de Sequelize
     }
-}, {
-    timestamps: true, // Habilita createdAt y updatedAt
-    tableName: 'observations' // Especifica el nombre de la tabla si es diferente al nombre del modelo
-});
+  );
 
