@@ -18,14 +18,14 @@ Content-Type: application/json
   "address": "Mitre 1430",
   "phone": "34163493854",
   "email": "masche494@gmail.com",
-  "birthDate": "30/08/2003"
+  "birthDate": "2003-08-30"
 }
 
 
 
 
 ### modificar un cliente (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/clients/
+PUT http://localhost:3000/api/clients/2
 Content-Type: application/json
 
 {
@@ -35,11 +35,11 @@ Content-Type: application/json
   "address": "3 de febrero 377",
   "phone": "3416470473",
   "email": "fnmunne@frro.ar",
-  "birthDate": "08/12/2002"
+  "birthDate": "2003-08-30"
 }
 
 ### modificar un cliente (PATCH - recurso parcial)
-PATCH http://localhost:3000/api/clients/
+PATCH http://localhost:3000/api/clients/2
 Content-Type: application/json
 
 {

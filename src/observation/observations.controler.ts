@@ -9,11 +9,9 @@ function sanitizeObservationInput(req:Request, res: Response, next: NextFunction
 
     req.body.sanitizedInput = {
         name: req.body.name,
-        dificultyLevel: req.body.dificultyLevel,
-        materialsUsed: req.body.materialsUsed,
+        professional: req.body.professional,
         description: req.body.description,
-        datePerformed: req.body.datePerformed,
-        id: req.body.id
+        medicalHistoryId: req.body.medicalHistoryId,
     } 
     //more checks here
 
@@ -43,8 +41,7 @@ async function add(req:Request, res:Response) {
         input.name,
         input.professional,
         input.description,
-        input.medicalhistoryId,
-        input.id
+        input.medicalHistoryId
     )
 
     const observations = await repository.add(observationInput)

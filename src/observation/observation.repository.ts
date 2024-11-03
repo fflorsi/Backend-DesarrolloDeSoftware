@@ -24,20 +24,35 @@ export class observationRepository{
         return newObservation.toJSON() as observation
     }
  
-    public async update(id:string, observationInput: observation): Promise<observation | undefined> {
+    public async update(id:string, observationInput: observation): Promise<observation | null> {
         const observationId = Number.parseInt(id)
-        const {...observationRow} = observationInput
-        await pool.query('update observations set ? where id = ?', [observationRow, observationId] )
-        return observationInput 
+        if (isNaN(observationId)) return null
+           try {
+        // Perform the update
+        const [rowsUpdated] = await ObservationModel.update(observationInput, {
+            where: { id: observationId },
+        });
+
+        console.log(`Rows updated: ${rowsUpdated}`);
+
+        // If no rows were updated, return null
+        if (rowsUpdated === 0) return null;
+
+        // Fetch the updated instance
+        const updatedObservation = await ObservationModel.findByPk(observationId);
+        if (!updatedObservation) return null;
+
+        return updatedObservation.toJSON() as observation;
+    } catch (error) {
+        console.error('Error during update:', error);
+        return null;
     }
-    public async delete(item:{id: string; }): Promise<observation | undefined>{
-        try {
-        const observationToDelete =await this.findOne(item);
-        const observationId = Number.parseInt(item.id)
-        await pool.query('delete from observations where id = ?', observationId)
-        return observationToDelete;
-        } catch (error: any){
-            throw new Error('Unable to delete observation')
-        }
     }
+    public async delete(item:{id: string; }): Promise<observation | null>{
+    const observationToDelete = await this.findOne(item);
+    if (!observationToDelete) return null; // Cambiar undefined por null
+    await ObservationModel.destroy({ where: { id: observationToDelete
+        .id } });
+    return observationToDelete; // Devuelve el cliente eliminado
+  }
 }

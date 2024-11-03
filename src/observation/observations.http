@@ -9,27 +9,25 @@ POST http://localhost:3000/api/observation
 Content-Type: application/json
 
 {
-    "id": 2,
-    "name": "auchis",
+    "name": "Tendiditis",
     "professional": 1,
-    "description": "aia",
-    "medicalhistoryid": 1
+    "description": "sin descripcion",
+    "medicalHistoryId": 1 
 }
 
 ### Modificar una observation 
-PUT http://localhost:3000/api/observations/001
+PUT http://localhost:3000/api/observation/1
 Content-Type: application/json
 
 {
-    "name": "apendicitis",
-    "dificultyLevel": "6",
-    "materialsUsed": "9",
-    "description": "removal of the apendix",
-    "datePerformed": "01/06/2024"
+    "name": "Tendiditis",
+    "professional": 1,
+    "description": "Nueva descripcion",
+    "medicalHistoryId": 1 
 }
 
 ### Modificar una observation 
-PATCH  http://localhost:3000/api/observations/001
+PATCH  http://localhost:3000/api/observation/1
 Content-Type: application/json
 
 {
@@ -39,4 +37,4 @@ Content-Type: application/json
 }
 
 ### Borrar una observation 
-DELETE http://localhost:3000/api/observations/001
+DELETE http://localhost:3000/api/observation/2
