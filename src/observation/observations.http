@@ -9,6 +9,7 @@ POST http://localhost:3000/api/observation
 Content-Type: application/json
 
 {
+    "id": 2,
     "name": "auchis",
     "professional": 1,
     "description": "aia",

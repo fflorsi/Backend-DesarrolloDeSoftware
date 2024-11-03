@@ -19,7 +19,7 @@ export class observationRepository{
         return observation ? (observation.toJSON()) : undefined
     }
 
-    public async add(observationInput: any): Promise<observation> {
+    public async add(observationInput: observation): Promise<observation> {
         const newObservation = await ObservationModel.create(observationInput)
         return newObservation.toJSON() as observation
     }
