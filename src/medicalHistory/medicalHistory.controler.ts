@@ -7,7 +7,8 @@ const repository = new MedicalHistoryRepository()
 function sanitizeMedicalHistoryInput(req: Request, res: Response, next: NextFunction){
   req.body.sanitizedInput = {
     petId: req.body.petId,
-    vaccines: req.body.vaccines
+    vaccines: req.body.vaccines,
+    observations: req.body.observations
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key)=>{

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, sanitizeObservationInput, findOne, add, update, remove } from "./observations.controler.js";
+import { findAll, sanitizeObservationInput, findOne, add, update, remove, findByMedicalHistory } from "./observations.controler.js";
 
 export const observationRouter = Router()
 
@@ -9,3 +9,4 @@ observationRouter.post('/',sanitizeObservationInput, add)
 observationRouter.put('/:id',sanitizeObservationInput, update)
 observationRouter.patch('/:id',sanitizeObservationInput, update)
 observationRouter.delete('/:id', remove)
+observationRouter.get('/byMedicalHistory/:id', findByMedicalHistory)

@@ -55,4 +55,12 @@ export class observationRepository{
         .id } });
     return observationToDelete; // Devuelve el cliente eliminado
   }
+
+      public async findByMedicalHistory(item:{id: string}): Promise<observation[] | undefined> {
+        const id = Number.parseInt(item.id)
+        if (isNaN(id)) return undefined
+        const observations:observation[] = await ObservationModel.findAll({ where: { medicalHistoryId: id } })
+
+        return observations ? (observations) : undefined
+    }
 }

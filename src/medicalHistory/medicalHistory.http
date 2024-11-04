@@ -11,8 +11,8 @@ Content-Type: application/json
 
 {
     "petId": 1,
-    "vaccines": [1,2]
-    //agregar observations
+    "vaccines": [1,2],
+    "observations": [1] 
 }
 
 ###modificar un  character  (PUT)

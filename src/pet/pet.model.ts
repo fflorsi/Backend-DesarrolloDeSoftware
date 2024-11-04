@@ -11,7 +11,7 @@ export const Pet = sequelize.define('pet', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    born_date: {
+    birthdate: {
         type: DataTypes.DATE,
         allowNull: false
     },

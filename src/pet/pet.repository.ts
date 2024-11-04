@@ -2,6 +2,7 @@ import { Repository } from "../shared/repository.js";
 import { Pet } from "./pet.entity.js";
 import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { Pet as PetModel } from "./pet.model.js";
 
 
 /*const pets = [new Pet(
@@ -51,18 +52,17 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export class PetRepository implements Repository<Pet>{
     public async findAll(): Promise<Pet[] | undefined> {
-        const [pets] = await pool.query('select * FROM pets')
-        return pets as Pet[] //esto solo funciona si no tenemos nada dentro de PET que deba ejecutarse
+       const pets = await PetModel.findAll()
+    return pets.map(pet => pet.toJSON() as Pet)
     }
+    
 
     public async findOne(item:{id:string}): Promise <Pet | undefined>{
         const id = Number.parseInt(item.id)
-        const [pets] = await pool.query<RowDataPacket[]>('select * from pets where id = ?', [id])
-        if (pets.length === 0){
-            return undefined
-        }
-        const pet = pets[0] as Pet
-        return pet
+        if (isNaN(id)) return undefined
+        const pet = await PetModel.findByPk(id)
+
+        return pet ? (pet.toJSON()) : undefined
         
     }
 

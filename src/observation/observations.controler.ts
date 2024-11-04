@@ -72,6 +72,11 @@ async function  remove ( req: Request, res:Response ){
     }
 }
 
+async function findByMedicalHistory(req:Request, res:Response){ 
+    const id = req.params.id 
+    res.json({data: await repository.findByMedicalHistory({id}) })
+}
 
 
-export { sanitizeObservationInput, findAll, findOne, add, update, remove }
+
+export { sanitizeObservationInput, findAll, findOne, add, update, remove, findByMedicalHistory }

@@ -14,27 +14,12 @@ export class MedicalHistoryRepository implements Repository<MedicalHistory>{
     }
 
   public async findOne(petId: {id: string }): Promise<MedicalHistory | undefined> {
-    const id = Number.parseInt(petId.id)
-    const [medicalHistories] = await pool.query<RowDataPacket[]>('select id from medicalhistories where petId = ?', [id])
-    if(medicalHistories.length === 0){
-      return undefined
+        const id = Number.parseInt(petId.id)
+        if (isNaN(id)) return undefined
+        const medicalHistory = await MedicalHistoryModel.findByPk(id)
+        return medicalHistory ? (medicalHistory.toJSON()) : undefined
     }
-    const medicalHistory = medicalHistories[0] as MedicalHistory
-    const [vaccines] = await pool.query<RowDataPacket[]>(
-        'SELECT v.name FROM medicalhistories_vaccines mhv INNER JOIN vaccines v ON mhv.vaccineId = v.id WHERE medicalHistoryId = ?',
-        [medicalHistory.id]
-    )
-    medicalHistory.vaccines = vaccines.map((vaccine) => vaccine.name);
-    const [observations] = await pool.query<RowDataPacket[]>(
-        'SELECT observation, datePerformed, name FROM observations WHERE medicalHistoryId = ?',
-        [medicalHistory.id])
-    medicalHistory.observations = observations.map((observation) => ({
-        observation: observation.observation,
-        datePerformed: observation.datePerformed,
-        name: observation.name
-    }));
-    return medicalHistory
-  }
+  
 
   public async add(medicalHistoryInput: MedicalHistory): Promise<MedicalHistory | undefined> {
     const {id, vaccines, ...medicalHistoryRow} = medicalHistoryInput
