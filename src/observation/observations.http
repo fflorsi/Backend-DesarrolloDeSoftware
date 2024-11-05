@@ -13,9 +13,9 @@ POST http://localhost:3000/api/observation
 Content-Type: application/json
 
 {
-    "name": "Tendiditis",
+    "name": "Observacion 3",
     "professional": 1,
-    "description": "sin descripcion",
+    "description": "Se detectaron problemas en rodilla",
     "medicalHistoryId": 1 
 }
 
