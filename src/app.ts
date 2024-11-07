@@ -15,6 +15,7 @@ import { Observation } from "./observation/observation.model.js";
 import { Professional } from "./professional/professional.model.js";
 import { Vaccine } from "./vaccine/vaccine.model.js";
 import { MedicalHistory_Vaccine } from "./medicalHistory/medicalHistory_vaccine.model.js";
+import { vaccineRouter } from "./vaccine/vaccine.routes.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -43,6 +44,8 @@ app.use('/api/clients', clientRouter )
 app.use('/api/medicalhistory', medicalHistoryRouter )
 
 app.use('/api/observation', observationRouter)
+
+app.use('/api/vaccines', vaccineRouter)
 app.use('/api/users', userRouter);
 app.use('/api/products',productRouter)
 

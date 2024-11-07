@@ -1,0 +1,33 @@
+### obtener todas las observations de observations
+GET http://localhost:3000/api/vaccines
+
+### Obtener una observation de observations 
+GET http://localhost:3000/api/vaccines/1
+
+
+###Crear nueva observation en observations 
+POST http://localhost:3000/api/vaccines
+Content-Type: application/json
+
+{
+    "name": "Antitetánica"
+}
+
+### Modificar una observation 
+PUT http://localhost:3000/api/vaccines/1
+Content-Type: application/json
+
+{
+    "name": "Antirrábica"
+}
+
+### Modificar una observation 
+PATCH  http://localhost:3000/api/vaccines/1
+Content-Type: application/json
+
+{
+    "name": "Antirrábica"
+}
+
+### Borrar una observation 
+DELETE http://localhost:3000/api/vaccines/1
