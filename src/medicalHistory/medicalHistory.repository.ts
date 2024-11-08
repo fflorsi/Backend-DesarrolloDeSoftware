@@ -4,6 +4,8 @@ import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { observation } from "../observation/observations.entity.js";
 import { MedicalHistory as MedicalHistoryModel } from "./medicalHistory.model.js";
+import { Vaccine as VaccineModel } from "../vaccine/vaccine.model.js";
+import { MedicalHistoryVaccineModel } from "./medicalHistory_vaccine.model.js";
 
 
 export class MedicalHistoryRepository implements Repository<MedicalHistory>{
@@ -57,5 +59,26 @@ export class MedicalHistoryRepository implements Repository<MedicalHistory>{
       throw new Error('Unable to delete Medical History')
     }
   }
+
+  public async findOneWithVaccines(petId: { id: string }): Promise<{ medicalHistory: MedicalHistory | undefined; vaccines: string[] }> {
+    const id = Number.parseInt(petId.id);
+    if (isNaN(id)) return { medicalHistory: undefined, vaccines: [] };
+    const medicalHistory = await MedicalHistoryModel.findByPk(id);
+    if (!medicalHistory) return { medicalHistory: undefined, vaccines: [] };
+    const medicalHistoryJson = medicalHistory.toJSON();
+    const vaccineIds: MedicalHistoryVaccineModel[] = await MedicalHistoryVaccineModel.findAll({
+        where: { medicalHistoryId: id },
+        attributes: ['vaccineId']
+    });
+    const ids = vaccineIds.map(vaccine => vaccine.vaccineId);
+    const vaccines = await VaccineModel.findAll({
+        where: {
+            id: ids
+        },
+        attributes: ['name']
+    });
+    const vaccineNames = vaccines.map(vaccine => vaccine.name);
+    return { medicalHistory: medicalHistoryJson, vaccines: vaccineNames };
+}
 
   }

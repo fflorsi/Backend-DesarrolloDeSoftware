@@ -1,25 +1,27 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import sequelize from '../db/connection.js';
 
-export const MedicalHistory_Vaccine = sequelize.define('medicalHistory_vaccine', {
+interface MedicalHistoryVaccineAttributes {
+    medicalHistoryId: number;
+    vaccineId: number;
+}
+
+export class MedicalHistoryVaccineModel extends Model<MedicalHistoryVaccineAttributes> implements MedicalHistoryVaccineAttributes {
+    public medicalHistoryId!: number;
+    public vaccineId!: number;
+}
+
+MedicalHistoryVaccineModel.init({
     medicalHistoryId: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        references: {  // Definir la relación
-            model: 'medicalHistories',  
-            key: 'id'  
-        }
+        allowNull: false,
     },
     vaccineId: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        references: {  // Definir la relación
-            model: 'vaccines',  
-            key: 'id'  
-        }
+        allowNull: false,
     }
 }, {
-    timestamps: true, // Habilita createdAt y updatedAt
-    tableName: 'medicalhistories_vaccines' // Especifica el nombre de la tabla si es diferente al nombre del modelo
+    sequelize,
+    tableName: 'medicalhistories_vaccines',
 });
 

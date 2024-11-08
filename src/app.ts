@@ -14,7 +14,7 @@ import { MedicalHistory } from "./medicalHistory/medicalHistory.model.js";
 import { Observation } from "./observation/observation.model.js";
 import { Professional } from "./professional/professional.model.js";
 import { Vaccine } from "./vaccine/vaccine.model.js";
-import { MedicalHistory_Vaccine } from "./medicalHistory/medicalHistory_vaccine.model.js";
+import { MedicalHistoryVaccineModel } from "./medicalHistory/medicalHistory_vaccine.model.js";
 import { vaccineRouter } from "./vaccine/vaccine.routes.js";
 
 const app = express()
@@ -64,7 +64,7 @@ app.use((req, res) => {
     await Type.sync()
     await Pet.sync()
     await Vaccine.sync()
-    await MedicalHistory_Vaccine.sync()
+    await MedicalHistoryVaccineModel.sync()
     await sequelize.sync(); // Sincroniza todos los modelos con la base de datos
     console.log("Tablas sincronizadas correctamente");
 

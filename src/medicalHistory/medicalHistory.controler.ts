@@ -80,4 +80,14 @@ async function findByPetId(req: Request, res: Response) {
 
 }
 
-export { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove, findByPetId }
+async function findOneWithVaccines(req: Request, res: Response){
+  const id = req.params.id
+  const medicalHistory = await repository.findOneWithVaccines({id})
+  if(!medicalHistory){
+    return res.status(404).send({message:'Medical History Not Found'})
+  }
+  res.json({data: medicalHistory})
+}
+
+
+export { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove, findByPetId, findOneWithVaccines }
