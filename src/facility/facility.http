@@ -1,0 +1,36 @@
+### obtener todos los servicios
+GET http://localhost:3000/api/facility
+
+### obtener un servicio
+GET http://localhost:3000/api/facility/id
+
+### crear un nuevo servicio
+POST http://localhost:3000/api/facility
+Content-Type: application/json
+
+{
+  "name": "Pileta",
+  "description": "Pileta de natacion",
+  "price": 500,
+}
+
+### modificar un servicio (PUT - recurso completo e idempotente)
+POST http://localhost:3000/api/facility/id
+Content-Type: application/json
+{
+  "name": "Pileta",
+  "description": "Pileta de natacion",
+  "price": 500,
+}
+
+### modificar un servicio (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/facility/id
+Content-Type: application/json
+{
+    "price": 600
+    }
+
+### borrar un servicio
+DELETE http://localhost:3000/api/facility/id
+
+
