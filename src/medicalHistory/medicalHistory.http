@@ -3,16 +3,14 @@ GET http://localhost:3000/api/medicalHistory
 
 ### obtener un character
 
-GET http://localhost:3000/api/medicalHistory/1
+GET http://localhost:3000/api/medicalHistory/3
 
 ### crear un nuevo character
 POST http://localhost:3000/api/medicalHistory
 Content-Type: application/json
 
 {
-    "petId": 1,
-    "vaccines": [1,2],
-    "observations": [1] 
+    "petId": 4
 }
 
 ###modificar un  character  (PUT)
@@ -20,8 +18,7 @@ PUT http://localhost:3000/api/medicalHistory/1
 Content-Type: application/json
 
 {
-    "petId": 2,
-    "vaccines": [1]
+    "petId": 2
 }
 
 ###modificar un  character parcialmente (PATCH)

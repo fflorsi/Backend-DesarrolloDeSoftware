@@ -1,22 +1,40 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/connection.js';
 
-export const MedicalHistory = sequelize.define('medicalHistory', {
-    id: {
+
+interface MedicalHistoryAttributes{
+    id?:number
+    petId:number
+}
+
+interface MedicalHistoryCreationAttributes extends Optional<MedicalHistoryAttributes,'id'>{}
+
+export class MedicalHistory extends Model<MedicalHistoryAttributes,MedicalHistoryCreationAttributes> implements MedicalHistoryAttributes{
+    public id!: number
+    public petId !: number
+
+}
+
+MedicalHistory.init(
+    {
+      id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
-    },
-      petId: {  
+        autoIncrement: true,
+      },
+      petId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {  // Definir la relación
-            model: 'pets',  
-            key: 'id'  
-        }
+        references: {
+          model: 'pets', // Debe coincidir con el nombre de la tabla relacionada
+          key: 'id',
+        },
+      },
+    },
+    {
+      timestamps: true, // Habilita createdAt y updatedAt
+      tableName: 'medicalHistories', // Especifica el nombre de la tabla
+      sequelize, // Asegúrate de pasar la instancia de Sequelize
     }
-}, {
-    timestamps: true, // Habilita createdAt y updatedAt
-    tableName: 'medicalHistories' // Especifica el nombre de la tabla si es diferente al nombre del modelo
-});
+  );
 

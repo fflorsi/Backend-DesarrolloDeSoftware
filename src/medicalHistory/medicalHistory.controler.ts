@@ -6,9 +6,7 @@ const repository = new MedicalHistoryRepository()
 
 function sanitizeMedicalHistoryInput(req: Request, res: Response, next: NextFunction){
   req.body.sanitizedInput = {
-    petId: req.body.petId,
-    vaccines: req.body.vaccines,
-    observations: req.body.observations
+    petId: req.body.petId
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key)=>{
@@ -38,9 +36,7 @@ async function add(req: Request, res: Response){
   const input = req.body.sanitizedInput
 
   const medicalHistoryInput = new MedicalHistory(
-    input.petId, 
-    input.vaccines,
-    input.observations
+    input.petId
   )
 
   const medicalHistory = await repository.add(medicalHistoryInput)

@@ -49,7 +49,7 @@ Content-Type: application/json
 //}
 
 ### eliminar un pet
-DELETE http://localhost:3000/api/pets/2
+DELETE http://localhost:3000/api/pets/3
 
 ###obtener las mascotas de 1 cliente
 GET http://localhost:3000/api/pets/by-client/1

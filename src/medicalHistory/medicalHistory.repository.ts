@@ -18,34 +18,39 @@ export class MedicalHistoryRepository implements Repository<MedicalHistory>{
   public async findOne(petId: {id: string }): Promise<MedicalHistory | undefined> {
         const id = Number.parseInt(petId.id)
         if (isNaN(id)) return undefined
-        const medicalHistory = await MedicalHistoryModel.findByPk(id)
+        const medicalHistory = await MedicalHistoryModel.findOne({ where: { petId: id } })
         return medicalHistory ? (medicalHistory.toJSON()) : undefined
     }
   
 
   public async add(medicalHistoryInput: MedicalHistory): Promise<MedicalHistory | undefined> {
-    const {id, vaccines, ...medicalHistoryRow} = medicalHistoryInput
-    const [result] = await pool.query<ResultSetHeader>('insert into medicalHistories set ?', [medicalHistoryRow])
-    medicalHistoryInput.id = result.insertId
-    for (const vaccine of [vaccines]){
-      await pool.query('insert into medicalHistories_vaccines set ?',{medicalHistoryId: medicalHistoryInput.id, vaccineId: vaccine})
-    }
-    return medicalHistoryInput
+        const newMedicalHistory = await MedicalHistoryModel.create(medicalHistoryInput)
+        return newMedicalHistory.toJSON() as MedicalHistory
   }
 
   public async update(id: string, medicalHistoryInput: MedicalHistory): Promise<MedicalHistory | undefined> {
     const medicalHistoryId = Number.parseInt(id)
-    const {vaccines, ...medicalHistoryRow} = medicalHistoryInput
-    await pool.query('update medicalHistories set ? where id = ?',[medicalHistoryRow,medicalHistoryId])
-    
-    await pool.query('delete from medicalHistories_vaccines where medicalHistoryId = ?', [medicalHistoryId])
-  
-    if([vaccines]?.length>0){
-      for (const vaccineId of [vaccines]){
-        await pool.query('insert into medicalHistories_vaccines set ?',{medicalHistoryId,vaccineId})
-      }
+        if (isNaN(medicalHistoryId)) return undefined
+           try {
+        // Perform the update
+        const [rowsUpdated] = await MedicalHistoryModel.update(medicalHistoryInput, {
+            where: { id: medicalHistoryId },
+        });
+
+        console.log(`Rows updated: ${rowsUpdated}`);
+
+        // If no rows were updated, return null
+        if (rowsUpdated === 0) return undefined;
+
+        // Fetch the updated instance
+        const updatedMedicalHistory = await MedicalHistoryModel.findByPk(medicalHistoryId);
+        if (!updatedMedicalHistory) return undefined;
+
+        return updatedMedicalHistory.toJSON() as MedicalHistory;
+    } catch (error) {
+        console.error('Error during update:', error);
+        return undefined;
     }
-    return await this.findOne({id})
   }
 
   public async delete(vaccine: { id: string }): Promise<MedicalHistory | undefined> {
