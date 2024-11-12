@@ -16,6 +16,8 @@ import { Professional } from "./professional/professional.model.js";
 import { Vaccine } from "./vaccine/vaccine.model.js";
 import { MedicalHistoryVaccineModel } from "./medicalHistory/medicalHistory_vaccine.model.js";
 import { vaccineRouter } from "./vaccine/vaccine.routes.js";
+import { Facility } from "./facility/facility.model.js";
+import { facilityRouter } from "./facility/facility.routes.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -49,6 +51,8 @@ app.use('/api/vaccines', vaccineRouter)
 app.use('/api/users', userRouter);
 app.use('/api/products',productRouter)
 
+//facilities
+app.use('/api/facilities', facilityRouter)
 
 // Manejo de rutas no encontradas
 app.use((req, res) => {
@@ -65,6 +69,7 @@ app.use((req, res) => {
     await Pet.sync()
     await Vaccine.sync()
     await MedicalHistoryVaccineModel.sync()
+    await Facility.sync()
     await sequelize.sync(); // Sincroniza todos los modelos con la base de datos
     console.log("Tablas sincronizadas correctamente");
 

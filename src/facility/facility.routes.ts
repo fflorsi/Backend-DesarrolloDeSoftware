@@ -5,6 +5,6 @@ export const facilityRouter = Router()
 
 facilityRouter.get('/', findAll)
 facilityRouter.get('/:id', findOne)
-facilityRouter.post('/', add)
+facilityRouter.post('/',sanitizeFacilityInput, add)
 facilityRouter.put('/:id', sanitizeFacilityInput, update)
 facilityRouter.delete('/:id', remove)
