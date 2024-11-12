@@ -9,7 +9,7 @@ POST http://localhost:3000/api/facilities
 Content-Type: application/json
 
 {
-  "name": "Consulta Especializada",
+  "name": "Consulta Flor",
   "description": "Consulta con especialista para casos complejos o de alta especialidad",
   "price": 700
 }
@@ -32,6 +32,6 @@ Content-Type: application/json
     }
 
 ### borrar un servicio
-DELETE http://localhost:3000/api/facilities/11
+DELETE http://localhost:3000/api/facilities/12
 
 
