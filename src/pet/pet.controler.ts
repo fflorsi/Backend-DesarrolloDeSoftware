@@ -8,9 +8,9 @@ const repository = new PetRepository();
 
 function sanitizePetInput(req: Request, res: Response, next: NextFunction) {
     req.body.sanitizedInput = { //solo las prop no nulas
-      client_id: req.body.client_id,
+      clientId: req.body.clientId,
       name: req.body.name,
-      age: req.body.age,
+      birthdate: req.body.birthdate,
       type: req.body.type,
       breed: req.body.breed,
       weight: req.body.weight
@@ -48,11 +48,11 @@ async function add(req:Request, res:Response) {
     const input = req.body.sanitizedInput;
 
     const petInput = new Pet(input.name, 
-      input.age, 
+      input.birthdate, 
       input.type, 
       input.breed, 
       input.weight,
-      input.client_id // Add client_id argument
+      input.clientId // Add client_id argument
     );
 
     try{

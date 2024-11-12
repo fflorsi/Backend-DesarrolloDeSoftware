@@ -5,54 +5,11 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Pet as PetModel } from "./pet.model.js";
 
 
-/*const pets = [new Pet(
-    "Firulais",
-    5,
-    "doggie",
-    "Pastor Aleman",
-    31,
-    "1-1-1-1-1"
-)]*/
 
-/*export class PetRepository implements Repository<Pet>{
-
-    public findAll(): Pet[] | undefined
-    {
-        return pets 
-    }
-
-    public findOne(item: { id: string }): Pet | undefined {
-        return pets.find((pet) => pet.id === item.id);
-    }
-
-        public add(item: Pet): Pet | undefined {
-            pets.push(item);
-            return item //cuando tenga acceso a bdd va a devolver un item con el id separado
-        
-        }
-
-        public update(item: Pet): Pet | undefined {
-            const petIdx = pets.findIndex((pet) => pet.id === item.id);
-            if (petIdx !== -1) {
-                pets[petIdx] = {...pets[petIdx],...item};
-            }
-            return pets[petIdx];
-        }
-
-        public delete(item: { id: string }): Pet | undefined {
-            const petIdx = pets.findIndex((pet) => pet.id === item.id);
-            if (petIdx !== -1) {
-            const deletedPets= pets[petIdx]
-            pets.splice(petIdx, 1);  
-            return deletedPets;
-            }
-        }
-
-    }*/
 
 export class PetRepository implements Repository<Pet>{
-    public async findAll(): Promise<Pet[] | undefined> {
-       const pets = await PetModel.findAll()
+    public async findAll(): Promise<Pet[]> {
+    const pets = await PetModel.findAll()
     return pets.map(pet => pet.toJSON() as Pet)
     }
     
@@ -68,45 +25,43 @@ export class PetRepository implements Repository<Pet>{
 
     public async update(id:string, petInput:Pet): Promise<Pet | undefined>{
         const petId = Number.parseInt(id)
-        const {...petRow} = petInput
-        await pool.query('update pets set ? where id = ?', [petRow, petId])
-        return petInput
+        if (isNaN(petId)) return undefined
+           try {
+        // Perform the update
+        const [rowsUpdated] = await PetModel.update(petInput, {
+            where: { id: petId },
+        })
+        console.log(`Rows updated: ${rowsUpdated}`)
+        if (rowsUpdated === 0) return undefined
+        const updatedPet = await PetModel.findByPk(petId);
+        if (!updatedPet) return undefined
+        return updatedPet.toJSON() as Pet;
+            } catch (error) {
+        console.error('Error during update:', error);
+        return undefined;
     }
+    }
+    
    
     public async add(petInput:Pet): Promise <Pet | undefined>{
-        const{id, ...petRow} = petInput
-        const [result] = await pool.query<ResultSetHeader>('insert into pets set ?', [petRow])
-        petInput.id=result.insertId
-        return petInput
+        const newPet = await PetModel.create(petInput)
+        return newPet.toJSON() as Pet
     }
    
     public async delete(item:{id:string}): Promise <Pet | undefined>{
-        
-        try{
-            const petToDelete = await this.findOne(item)
-            const petId = Number.parseInt(item.id)
-            await pool.query('delete from pets where id = ?',petId)
-            //no se puede retornar el elemento eliminado asi que hacemos esto
-            return petToDelete
-        }catch(error: any){
-            throw new Error('unable to delete Pet')
-        }
+    const petToDelete = await this.findOne(item)
+    if (!petToDelete) return undefined
+    await PetModel.destroy({ where: { id: item
+        .id } });
+    return petToDelete; // Devuelve el cliente eliminado
     }
 
     public async findByClientId(item: { clientId: string }): Promise<Pet[] | undefined> {
-        const clientId = Number.parseInt(item.clientId);
-        if (isNaN(clientId)) {
-            return undefined;
-        }
-        try {
-            const [pets] = await pool.query<RowDataPacket[]>('SELECT * FROM pets WHERE client_id = ?', [clientId]);
-            if (pets.length === 0) {
-                return undefined;
-            }
-            return pets as Pet[];
-        } catch (error: any) {
-            throw new Error('Unable to find pets by client');
-        }
+        const id = Number.parseInt(item.clientId)
+        if (isNaN(id)) return undefined
+        const pets:Pet[] = await PetModel.findAll({ where: { clientId: id } })
+
+        return pets ? (pets) : undefined
     }
 }
     

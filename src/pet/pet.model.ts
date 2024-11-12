@@ -1,46 +1,73 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/connection.js';
 
-export const Pet = sequelize.define('pet', {
-    id: {
+interface PetAttributes{
+    id?:number
+    name: string
+    birthdate: Date
+    type: number
+    breed: string
+    weight: number
+    clientId: number
+}
+
+interface PetCreationAttributes extends Optional<PetAttributes,'id'>{}
+
+export class Pet extends Model<PetAttributes,PetCreationAttributes> implements PetAttributes{
+    id!:number
+    name!: string
+    birthdate!: Date
+    type!: number
+    breed!: string
+    weight!: number
+    clientId!: number
+
+}
+
+Pet.init(
+    {
+      id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
-    },
-    name: {
+        autoIncrement: true,
+      },
+      name: {
         type: DataTypes.STRING,
-        allowNull: false
-    },
-    birthdate: {
+        allowNull: false,
+      },
+      birthdate: {
         type: DataTypes.DATE,
         allowNull: false
-    },
-    type: {
+      },
+      type: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references:{
-          model: 'types',
-          key: 'id'
+            model: 'types',
+            key: 'id'
         }
-    },
-    breed: {
+      },
+      breed:{
         type: DataTypes.STRING,
         allowNull: false
-    },
-    weight:{
+      },
+      weight:{
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-      clientId: {  
+      },
+      clientId:{
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {  // Definir la relación
-            model: 'clients',  
-            key: 'id'  
+        references:{
+            model: 'clients',
+            key: 'id'
         }
+      }
+    },
+    {
+      timestamps: true, // Habilita createdAt y updatedAt
+      tableName: 'pets', // Especifica el nombre de la tabla
+      sequelize, // Asegúrate de pasar la instancia de Sequelize
     }
-}, {
-    timestamps: true, // Habilita createdAt y updatedAt
-    tableName: 'pets' // Especifica el nombre de la tabla si es diferente al nombre del modelo
-});
+  );
 

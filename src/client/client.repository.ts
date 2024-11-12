@@ -1,5 +1,6 @@
 import { Client as ClientModel } from './client.model.js'; // Importar modelo Sequelize
 import { Client, Client as ClientInterface } from './client.entity.js'; // Importar la interfaz
+import { Pet as PetModel} from '../pet/pet.model.js';
 
 export class ClientRepository {
   
@@ -65,10 +66,10 @@ export class ClientRepository {
 
   // Obtener un cliente y sus mascotas por DNI
   public async findClientAndPetsByDni(dni: string): Promise<ClientInterface | null> {
-    const client = await ClientModel.findOne({ 
-      where: { dni }, 
-      include: ['pets'] // Asegúrate de que esta relación esté definida en tu modelo
-    });
-    return client ? (client.toJSON() as ClientInterface) : null; // Manejo de null
+const clientWithPets = await ClientModel.findOne({
+    where: { dni: dni },
+    include: [{ model: PetModel, as: 'pets' }]
+});
+    return clientWithPets ? (clientWithPets.toJSON() as ClientInterface) : null; // Manejo de null
   }
 }
