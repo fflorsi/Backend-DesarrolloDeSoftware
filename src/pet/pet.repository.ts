@@ -44,6 +44,7 @@ export class PetRepository implements Repository<Pet>{
     
    
     public async add(petInput:Pet): Promise <Pet | undefined>{
+        console.log('tu mader',petInput)
         const newPet = await PetModel.create(petInput)
         return newPet.toJSON() as Pet
     }
