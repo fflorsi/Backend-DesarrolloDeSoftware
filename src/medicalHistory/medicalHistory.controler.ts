@@ -76,14 +76,24 @@ async function findByPetId(req: Request, res: Response) {
 
 }
 
-async function findOneWithVaccines(req: Request, res: Response){
-  const id = req.params.id
-  const medicalHistory = await repository.findOneWithVaccines({id})
-  if(!medicalHistory){
-    return res.status(404).send({message:'Medical History Not Found'})
+async function addVaccineToMedicalHistory(req: Request, res: Response) {
+  const medicalHistoryId = req.params.id; // ID de la historia médica
+  const vaccineId = req.body.vaccineId; // ID de la vacuna que se va a agregar
+
+  // Verifica si la historia médica existe
+  const medicalHistory = await repository.findOne({ id: medicalHistoryId });
+  if (!medicalHistory) {
+    return res.status(404).send({ message: 'Medical History Not Found' });
   }
-  res.json({data: medicalHistory})
+
+  // Agrega la vacuna a la historia médica
+  const updatedMedicalHistory = await repository.addVaccine(medicalHistoryId, vaccineId);
+  if (!updatedMedicalHistory) {
+    return res.status(404).send({ message: 'Vaccine Not Found or already added' });
+  }
+
+  return res.status(200).send({ message: 'Vaccine added to Medical History successfully', data: updatedMedicalHistory });
 }
 
 
-export { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove, findByPetId, findOneWithVaccines }
+export { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove, findByPetId, addVaccineToMedicalHistory }
