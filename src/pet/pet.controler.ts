@@ -7,23 +7,26 @@ import { findOne as findClientOne } from '../client/client.controler.js'
 const repository = new PetRepository(); 
 
 function sanitizePetInput(req: Request, res: Response, next: NextFunction) {
-    req.body.sanitizedInput = { //solo las prop no nulas
-      clientId: req.body.clientId,
-      name: req.body.name,
-      birthdate: req.body.birthdate,
-      type: req.body.type,
-      breed: req.body.breed,
-      weight: req.body.weight
+  req.body.sanitizedInput = {
+      // Cambiado a 'client_id' para coincidir con el nombre en 'req.body'
+    name: req.body.name,
+    birthdate: req.body.birthdate,
+    type: req.body.type,
+    breed: req.body.breed,
+    weight: req.body.weight,
+    clientId: req.body.client_id,
+  };
+
+  // Elimina solo las propiedades que son null o undefined
+  Object.keys(req.body.sanitizedInput).forEach((key) => {
+    if (req.body.sanitizedInput[key] === null || req.body.sanitizedInput[key] === undefined) {
+      delete req.body.sanitizedInput[key];
     }
-    //mas validaciones con una libreria
-    Object.keys(req.body.sanitizedInput).forEach((key) => {
-      if (req.body.sanitizedInput[key] === undefined) {
-        delete req.body.sanitizedInput[key];}
-    }),
-        
+  });
   
-    next();
-  }
+  next();
+}
+
 
 async function findAll(req:Request, res:Response) {
     res.json({data: await repository.findAll()});
@@ -44,25 +47,28 @@ async function findOne(req: Request, res: Response) {
 
 
 //post
-async function add(req:Request, res:Response) {
-    const input = req.body.sanitizedInput;
+async function add(req: Request, res: Response) {
+  const input = req.body.sanitizedInput || req.body;
 
-    const petInput = new Pet(input.name, 
-      input.birthdate, 
-      input.type, 
-      input.breed, 
-      input.weight,
-      input.clientId // Add client_id argument
-    );
+  console.log('Input data:', input); // Para depurar y ver qué datos se reciben
 
-    try{
+  const petInput = new Pet(
+    input.name, 
+    input.birthdate, 
+    input.type, 
+    input.breed, 
+    input.weight,
+    input.clientId // Asegúrate de que `clientId` está presente en `input`
+  );
+  try {
     const pet = await repository.add(petInput);
-    return res.status(201).send({message:'Pet created', data: pet})
-    }catch(error){
-      return res.status(500).send({message: 'Failed to create Pet'})
-    }
-  
-  }
+    return res.status(201).send({ message: 'Pet created', data: pet });
+} catch (error) {
+    const errorMessage = (error as Error).message; 
+    console.error('Error creating pet:', errorMessage);
+    return res.status(500).send({ message: 'Failed to create Pet', error: errorMessage });
+}
+}
   
   //put
 async function update(req:Request, res:Response) {
