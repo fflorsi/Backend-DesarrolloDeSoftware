@@ -56,16 +56,27 @@ async function add(req:Request, res:Response) {  //Crea un nuevo professional en
     return res.status(201).json({message:'Professional created', data:professionals})
 }
 
-async function update(req:Request, res:Response) { //Actualiza, cambia datos de un professional ya creado en professionals
-    req.body.sanitizedInput.id=req.params.id
-    const professional= await repository.update(req.params.id, req.body.sanitizedInput)
+async function update(req: Request, res: Response) {
+    req.body.sanitizedInput.id = req.params.id;
+    const professional = await repository.update(req.params.id, req.body.sanitizedInput);
 
-    if(!professional){
-       return res.status(404).send({message: 'Professional not found'}) 
+    if (!professional) {
+        return res.status(404).json({
+            isSuccess: false,
+            message: 'Professional not found',
+            status: 'error'
+        });
     }
-    
-    return res.status(200).send({message:'Professional updated successfully', data:professional})
+
+    return res.status(200).json({
+        isSuccess: true,
+        message: 'Professional updated successfully',
+        status: 'success',
+        data: professional
+    });
 }
+
+
 
 
 
@@ -76,7 +87,7 @@ async function  remove ( req: Request, res:Response ){ //Elimina un professional
     if(!professional){
         res.status(404).send({message: 'Professional not found'})
     } else {
-    res.status(200).send({message:'Professional deleted succesfully'})
+    res.status(200).send({message:'Professional deleted successfully'})
     }
 }
 

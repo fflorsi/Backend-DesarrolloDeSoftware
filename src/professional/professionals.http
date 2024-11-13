@@ -2,7 +2,7 @@
 GET http://localhost:3000/api/professionals
 
 ### Obtener un professional de professionals - FUNCIONA CON ID
-GET http://localhost:3000/api/professionals/1
+GET http://localhost:3000/api/professionals/35
 
 ###Crear nuevo professional en professionals - FUNCIONA CON ID
 POST http://localhost:3000/api/professionals
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Modificar un professional (put - recurso completo e idempotente) - FUNCIONA CON ID
-PUT http://localhost:3000/api/professionals/1
+PUT http://localhost:3000/api/professionals/33
 Content-Type: application/json
 
 {
@@ -33,7 +33,7 @@ Content-Type: application/json
 }
 
 ### Modificar un professional (patch - recurso parcial ) - NO FUNCIONA CON ID
-PATCH  http://localhost:3000/api/professionals/1
+PATCH  http://localhost:3000/api/professionals/34
 Content-Type: application/json
 
 {
@@ -45,4 +45,4 @@ Content-Type: application/json
 }
 
 ### Borrar un professional - FUNCIONA CON ID
-DELETE http://localhost:3000/api/professionals/2
+DELETE http://localhost:3000/api/professionals/38

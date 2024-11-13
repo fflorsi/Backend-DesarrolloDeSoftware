@@ -23,8 +23,8 @@ export const Professional = sequelize.define('professional', {
             type: DataTypes.STRING,
             allowNull: false
         },
-        phone: {
-            type: DataTypes.STRING,
+        phone_number: {
+            type: DataTypes.STRING(30),
             allowNull: false
         },
         email: {
