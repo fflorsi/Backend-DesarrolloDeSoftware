@@ -1,59 +1,67 @@
 import { Repository } from "../shared/repository.js";
-import { Professional } from "./professionals.entity.js";
+import { Professional as ProfessionalInterface } from "./professionals.entity.js";
 import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { Sequelize } from "sequelize";
+import { Professional as ProfessionalModel } from '../professional/professional.model.js';
 
-/*const professionals = [
-    new Professional(
-        '44021044',
-        'Larroquette',
-        'Juan Bautista',
-        'Izarra 1244',
-        '3400 5330080',
-        'juan@gmail.com',
-        '8/8/2002',
-        'a02b91bc-3769-4221-beb1-d7a3aeba7dad'
-    ),
-]*/
-
-export class ProfessionalRepository implements Repository<Professional>{
-    public async findAll(): Promise<Professional[] | undefined> {
-        const [professionals] = await pool.query('select * from professionals')
-        return professionals as Professional[]
-    }
-
-    public async findOne(item:{id: string}): Promise<Professional | undefined> {
-        const id = Number.parseInt(item.id)
-        const [professionals] = await pool.query<RowDataPacket[]>('select * from professionals where id = ?', [id])
-        if(professionals.length ===0){
-            return undefined
-        }
-        const professional = professionals[0] as Professional
-
-        return professional
-    }
-
-    public async add(professionalInput: Professional): Promise<Professional | undefined> {
-        const {id,...professionalRow} = professionalInput
-        const [result] =  await pool.query<ResultSetHeader>('insert into professionals set ?', [professionalRow]) 
-        professionalInput.id=result.insertId
-        return professionalInput
-    }
- 
-    public  async update(id:string, professionalInput: Professional): Promise<Professional | undefined> {
-        const professionalId = Number.parseInt(id)
-        const {...professionalRow} = professionalInput
-        await pool.query('update professionals set ? where id = ?', [professionalRow, professionalId] )
-        return professionalInput 
-    }
-    public async delete(item:{id: string; }): Promise<Professional | undefined>{
+export class ProfessionalRepository {
+    public async findAll(): Promise<ProfessionalInterface[] | undefined> {
         try {
-        const professionalToDelete =await this.findOne(item);
-        const professionalId = Number.parseInt(item.id)
-        await pool.query('delete from professionals where id = ?', professionalId)
-        return professionalToDelete;
-        } catch (error: any){
-            throw new Error('Unable to delete professional')
+            const professionals = await ProfessionalModel.findAll();
+            return professionals.map(professional => professional.toJSON() as ProfessionalInterface);
+        } catch (error) {
+            console.error('Error fetching professionals:', error);
+            throw new Error('Unable to fetch professionals');
+        }
+    }
+
+    public async findOne(item: { id: string }): Promise<ProfessionalInterface | undefined> {
+        const id = Number.parseInt(item.id);
+        try {
+            const professional = await ProfessionalModel.findByPk(id);
+            return professional ? (professional.toJSON() as ProfessionalInterface) : undefined;
+        } catch (error) {
+            console.error('Error fetching professional by ID:', error);
+            throw new Error('Unable to fetch professional');
+        }
+    }
+
+    public async add(professionalInput: Omit<ProfessionalInterface, 'id'>): Promise<ProfessionalInterface | undefined> {
+        try {
+            const newProfessional = await ProfessionalModel.create(professionalInput);
+            return newProfessional.toJSON() as ProfessionalInterface;
+        } catch (error) {
+            console.error('Error adding professional:', error);
+            throw new Error('Unable to add professional');
+        }
+    }
+
+    public async update(id: string, professionalInput: Partial<ProfessionalInterface>): Promise<ProfessionalInterface | undefined> {
+        const professionalId = Number.parseInt(id);
+        try {
+            const professionalToUpdate = await ProfessionalModel.findByPk(professionalId);
+            if (!professionalToUpdate) return undefined;
+            
+            await professionalToUpdate.update(professionalInput);
+            return professionalToUpdate.toJSON() as ProfessionalInterface;
+        } catch (error) {
+            console.error('Error updating professional:', error);
+            throw new Error('Unable to update professional');
+        }
+    }
+
+    public async delete(item: { id: string }): Promise<ProfessionalInterface | undefined> {
+        const professionalId = Number.parseInt(item.id);
+        try {
+            const professionalToDelete = await ProfessionalModel.findByPk(professionalId);
+            if (!professionalToDelete) return undefined;
+            
+            await professionalToDelete.destroy();
+            return professionalToDelete.toJSON() as ProfessionalInterface;
+        } catch (error) {
+            console.error('Error deleting professional:', error);
+            throw new Error('Unable to delete professional');
         }
     }
 }

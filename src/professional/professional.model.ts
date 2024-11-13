@@ -23,7 +23,7 @@ export const Professional = sequelize.define('professional', {
             type: DataTypes.STRING,
             allowNull: false
         },
-        phone_number: {
+        phone: {
             type: DataTypes.STRING(30),
             allowNull: false
         },
@@ -37,6 +37,6 @@ export const Professional = sequelize.define('professional', {
         }
 }, {
     timestamps: true, // Habilita createdAt y updatedAt
-    tableName: 'professionals' // Especifica el nombre de la tabla si es diferente al nombre del modelo
+    tableName: 'professionals' 
 });
 
