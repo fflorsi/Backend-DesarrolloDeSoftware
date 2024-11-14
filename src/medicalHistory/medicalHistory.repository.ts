@@ -21,11 +21,11 @@ public async findAll(): Promise<MedicalHistory[] | undefined> {
 
     
 
-public async findOne(petId: { id: string }): Promise<MedicalHistory | undefined> {
-    const id = Number.parseInt(petId.id);
+public async findOne(medicalHistoryId: { id: string }): Promise<MedicalHistory | undefined> {
+    const id = Number.parseInt(medicalHistoryId.id);
     if (isNaN(id)) return undefined;
     const medicalHistory = await MedicalHistoryModel.findOne({
-        where: { petId: id },
+        where: { id: id },
         include: [{
             model: VaccineModel,
             through: { attributes: [] } // Esto excluye los atributos de la tabla intermedia
@@ -85,5 +85,19 @@ public async findOne(petId: { id: string }): Promise<MedicalHistory | undefined>
   await medicalHistory.addVaccine(vaccine); // Esto asume que tienes la relación definida en el modelo
 
   return medicalHistory.toJSON() as MedicalHistory; // Retorna la historia médica actualizada
-}
+  }
+
+  public async removeVaccine(medicalHistoryId: string, vaccineId: number): Promise<MedicalHistory | undefined> {
+    const medicalHistory = await MedicalHistoryModel.findByPk(medicalHistoryId);
+    const vaccine = await VaccineModel.findByPk(vaccineId);
+
+    if (!medicalHistory || !vaccine) {
+        return undefined; // Retorna undefined si no se encuentra la historia médica o la vacuna
+    }
+
+    // Desvincula la vacuna de la historia médica
+    await medicalHistory.removeVaccine(vaccine); // Esto asume que tienes la relación definida en el modelo
+
+    return medicalHistory.toJSON() as MedicalHistory; // Retorna la historia médica actualizada
+  }
   }

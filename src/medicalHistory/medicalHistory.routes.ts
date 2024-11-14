@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove, findByPetId, addVaccineToMedicalHistory } from "./medicalHistory.controler.js";
+import { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove, findByPetId, addVaccineToMedicalHistory, removeVaccineFromMedicalHistory } from "./medicalHistory.controler.js";
 
 export const medicalHistoryRouter = Router()
 
@@ -10,4 +10,5 @@ medicalHistoryRouter.post('/', sanitizeMedicalHistoryInput, add)
 medicalHistoryRouter.put('/:id', sanitizeMedicalHistoryInput, update)
 medicalHistoryRouter.patch('/:id', sanitizeMedicalHistoryInput, update)
 medicalHistoryRouter.delete('/:id', remove)
-medicalHistoryRouter.post('/:id/vaccines', addVaccineToMedicalHistory);
+medicalHistoryRouter.post('/:id/vaccines', addVaccineToMedicalHistory)
+medicalHistoryRouter.delete('/:id/vaccines', removeVaccineFromMedicalHistory)

@@ -16,6 +16,7 @@ export class MedicalHistory extends Model<MedicalHistoryAttributes, MedicalHisto
 
     // Aquí puedes agregar tipos para los métodos que necesitas
     public addVaccine!: (vaccine: Vaccine) => Promise<void>;
+    public removeVaccine!: (vaccine: Vaccine) => Promise<void>
 }
 
 MedicalHistory.init(

@@ -3,7 +3,7 @@ GET http://localhost:3000/api/medicalHistory
 
 ### obtener un character
 
-GET http://localhost:3000/api/medicalHistory/1
+GET http://localhost:3000/api/medicalHistory/8
 
 ### crear un nuevo character
 POST http://localhost:3000/api/medicalHistory
@@ -39,10 +39,18 @@ GET http://localhost:3000/api/medicalHistory/findOneWithVaccines/1
 
 
 ###
-POST http://localhost:3000/api/medicalHistory/4/vaccines
+POST http://localhost:3000/api/medicalHistory/1/vaccines
 
 Content-Type: application/json
 
 {
-    "vaccineId": 1
+    "vaccineId": 9
+}
+
+###
+DELETE http://localhost:3000/api/medicalHistory/7/vaccines?vaccineId=2
+
+Content-Type: application/json
+{
+    "vaccineId": 2
 }
