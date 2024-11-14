@@ -1,5 +1,6 @@
 import { Facility as FacilityModel } from "./facility.model.js";
 import { Facility, Facility as FacilityInterface } from "./facility.entity.js";
+import { Op } from "sequelize";
 
 export class FacilityRepository {
 
@@ -54,4 +55,15 @@ export class FacilityRepository {
 
         return facilityToDelete;
     }
+
+    public async findByName(name: string): Promise<FacilityInterface[]> {
+    const facilities = await FacilityModel.findAll({
+        where: {
+            name: {
+                [Op.like]: `%${name}%` // Usar LIKE para buscar coincidencias
+            }
+        }
+    });
+    return facilities.map(facility => facility.toJSON() as FacilityInterface);
+}
 }

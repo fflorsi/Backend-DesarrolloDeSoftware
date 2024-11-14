@@ -80,4 +80,15 @@ async function remove(req: Request, res: Response) {
     return res.json({ message: 'Facility deleted' });
 }
 
-export { sanitizeFacilityInput, findAll, findOne, add, update, remove }
+async function searchByName(req: Request, res: Response) {
+    const  name  = req.query.name;
+    console.log(name)
+    if (!name || typeof name !== 'string') {
+        return res.status(400).json({ message: 'Invalid name parameter' });
+    }
+
+    const facilities = await repository.findByName(name);
+    res.json({ data: facilities });
+}
+
+export { sanitizeFacilityInput, findAll, findOne, add, update, remove, searchByName }
