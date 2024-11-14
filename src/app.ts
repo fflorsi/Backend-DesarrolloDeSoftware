@@ -18,6 +18,9 @@ import { vaccineRouter } from "./vaccine/vaccine.routes.js";
 import { Facility } from "./facility/facility.model.js";
 import { facilityRouter } from "./facility/facility.routes.js";
 import { MedicalHistoryVaccine } from "./medicalHistory/medicalHistory_vaccines.model.js";
+import { Appointment } from "./appointment/appointment.model.js";
+import {appointmentRouter} from "./appointment/appointment.routes.js";
+import "./association.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -54,6 +57,9 @@ app.use('/api/products',productRouter)
 //facilities
 app.use('/api/facilities', facilityRouter)
 
+//turnos
+app.use('/api/appointments', appointmentRouter);
+
 // Manejo de rutas no encontradas
 app.use((req, res) => {
   return res.status(404).send({ message: "Not found" });
@@ -70,6 +76,7 @@ app.use((req, res) => {
     await MedicalHistory.sync()
     await Facility.sync()
     await MedicalHistoryVaccine.sync()
+    await Appointment.sync()
     await sequelize.sync(); // Sincroniza todos los modelos con la base de datos
     console.log("Tablas sincronizadas correctamente");
 
