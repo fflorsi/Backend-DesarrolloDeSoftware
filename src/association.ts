@@ -12,6 +12,6 @@ Appointment.belongsTo(Professional, { foreignKey: 'professionalId' });
 Facility.hasMany(Appointment, { foreignKey: 'facilityId' });
 Appointment.belongsTo(Facility, { foreignKey: 'facilityId' });
 
-Appointment.belongsTo(Pet, { as: 'pet', foreignKey: 'petId' });
+
 
 

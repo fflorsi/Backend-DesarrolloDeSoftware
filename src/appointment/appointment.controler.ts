@@ -30,8 +30,8 @@ export const updateAppointmentState = async (req: Request, res: Response): Promi
   const { id } = req.params;
   const { state } = req.body;
 
-  if (!['received', 'cancelled'].includes(state)) {
-    return res.status(400).json({ message: 'Estado inválido. Debe ser "received" o "cancelled".' });
+  if (!['done', 'cancelled'].includes(state)) {
+    return res.status(400).json({ message: 'Estado inválido. Debe ser "done" o "cancelled".' });
   }
 
   try {
@@ -87,7 +87,7 @@ export const getAllAppointments = async (req: Request, res: Response): Promise<R
 export const getAppointmentsByState = async (req: Request, res: Response): Promise<Response> => {
   const { state } = req.params;
 
-  if (!['scheduled', 'received', 'cancelled'].includes(state)) {
+  if (!['scheduled', 'done', 'cancelled'].includes(state)) {
     return res.status(400).json({ message: 'Estado inválido.' });
   }
 
@@ -126,46 +126,44 @@ export const getAllAppointmentsWithDetails = async (req: Request, res: Response)
         }
       ]
     });
-    console.log(appointments)
     res.json(appointments);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching appointments', error });
   }
 };
 
-
-
-
-
 export const getFutureAppointmentsWithDetails = async (req: Request, res: Response): Promise<void> => {
   const now = new Date();
   try {
     const futureAppointments = await Appointment.findAll({
-      group: ['Appointment.id'],  
+      group: ['Appointment.id'],
       where: {
-        dateTime: { [Op.gt]: now }  
+        dateTime: { [Op.gt]: now }, 
+        state: { [Op.eq]: 'scheduled' } 
       },
       include: [
         { 
-          model: Pet, 
-          as: 'pet', 
-          attributes: ['id', 'name']  
+          model: Pet,
+          attributes: ['id', 'name']
         },
         { 
-          model: Professional, 
-          as: 'professional', 
-          attributes: ['id', 'firstname', 'lastname']  
+          model: Professional,
+          attributes: ['id', 'firstname', 'lastname']
         },
         { 
-          model: Facility, 
-          as: 'facility', 
-          attributes: ['id', 'name']  
+          model: Facility,
+          attributes: ['id', 'name']
         }
       ]
     });
+    console.log(futureAppointments)
     res.json(futureAppointments);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching future appointments', error });
+    const err = error as Error;
+    console.error("Error in getFutureAppointmentsWithDetails:", err.message);
+    res.status(500).json({ message: 'Error fetching future appointments', error: err.message });
   }
 };
+
+
 
