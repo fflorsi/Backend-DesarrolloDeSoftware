@@ -1,5 +1,6 @@
 import { Client as ClientModel } from './client.model.js'; // Importar modelo Sequelize
 import { Client, Client as ClientInterface } from './client.entity.js'; // Importar la interfaz
+import { Op, Sequelize } from 'sequelize';
 
 export class ClientRepository {
   
@@ -51,10 +52,6 @@ export class ClientRepository {
     }
 }
 
-
-
-
-
   // Borrar un cliente
   public async delete(item: { id: string }): Promise<ClientInterface | null> {
     const clientToDelete = await this.findOne(item);
@@ -70,5 +67,23 @@ export class ClientRepository {
       include: ['pets'] // Asegúrate de que esta relación esté definida en tu modelo
     });
     return client ? (client.toJSON() as ClientInterface) : null; // Manejo de null
+  }
+
+  public async searchClientsByDNS(searchString: string): Promise<ClientInterface[] | null> {
+      try {
+          const clients = await ClientModel.findAll({
+              where: {
+                  [Op.or]: [
+                      { dni: { [Op.like]: `%${searchString}%` } },
+                      { firstname: { [Op.like]: `%${searchString}%` } },
+                      { lastname: { [Op.like]: `%${searchString}%` } },
+                  ],
+              },
+          });
+          return clients.map(client => client.toJSON() as ClientInterface) || null;
+      } catch (error) {
+          console.error('Error al buscar clientes:', error);
+          return null;
+      }
   }
 }

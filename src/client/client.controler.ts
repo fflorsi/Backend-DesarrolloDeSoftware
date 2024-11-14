@@ -115,4 +115,24 @@ async function findClientAndPetsByDni(req: Request, res: Response) {
     return res.status(500).send({ message: 'Failed to find client and pets' });
   }
 }
-export { sanitizeClientInput, findAll, findOne, add, update, remove, findClientAndPetsByDni }
+
+async function searchClientsByDNS(req: Request, res: Response) {
+  const { searchString } = req.params;
+  try {
+      // Llamamos al servicio o método que implementa la búsqueda
+      const clients = await repository.searchClientsByDNS(searchString);
+      console.log(clients) // Agregar await aquí
+
+      // Verificamos si no se encontraron clientes
+      if (!clients || clients.length === 0) {
+          return res.status(404).json({ message: 'No se encontraron clientes.' });
+      }
+
+      // Enviamos la respuesta con los clientes encontrados
+      return res.status(200).json(clients);
+  } catch (error) {
+      console.error('Error en searchClientByDNS:', error);
+      return res.status(500).json({ message: 'Error interno del servidor.' });
+  }
+}
+export { sanitizeClientInput, findAll, findOne, add, update, remove, findClientAndPetsByDni, searchClientsByDNS }
