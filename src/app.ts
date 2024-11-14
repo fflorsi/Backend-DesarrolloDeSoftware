@@ -21,6 +21,7 @@ import { MedicalHistoryVaccine } from "./medicalHistory/medicalHistory_vaccines.
 import { Appointment } from "./appointment/appointment.model.js";
 import {appointmentRouter} from "./appointment/appointment.routes.js";
 import "./association.js";
+import { typeRouter } from "./types/type.routes.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -59,6 +60,8 @@ app.use('/api/facilities', facilityRouter)
 
 //turnos
 app.use('/api/appointments', appointmentRouter);
+
+app.use('/api/types', typeRouter)
 
 // Manejo de rutas no encontradas
 app.use((req, res) => {
