@@ -2,6 +2,9 @@ import { Appointment } from './appointment/appointment.model.js';
 import { Pet } from './pet/pet.model.js';
 import { Professional } from './professional/professional.model.js';
 import { Facility } from './facility/facility.model.js';
+import { Order } from './order/order.model.js';
+import { Product} from './product/product.model.js';
+import { OrderItem } from './order/orderDetail.model.js';
 
 Pet.hasMany(Appointment, { foreignKey: 'petId' });
 Appointment.belongsTo(Pet, { foreignKey: 'petId' });
@@ -13,5 +16,20 @@ Facility.hasMany(Appointment, { foreignKey: 'facilityId' });
 Appointment.belongsTo(Facility, { foreignKey: 'facilityId' });
 
 
-
+Order.hasMany(OrderItem, {
+    foreignKey: 'orderId',
+    as: 'items',
+  });
+  OrderItem.belongsTo(Order, {
+    foreignKey: 'orderId',
+    as: 'order',
+  });
+  Product.hasMany(OrderItem, {
+    foreignKey: 'productId',
+    as: 'orderItems',
+  });
+  OrderItem.belongsTo(Product, {
+    foreignKey: 'productId',
+    as: 'product',
+  });
 
