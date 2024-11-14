@@ -5,7 +5,7 @@
 GET http://localhost:3000/api/pets
 
 ### obtener un pet por id
-GET http://localhost:3000/api/pets/2
+GET http://localhost:3000/api/pets/1
 
 ### crear un pet y agregarselo a un cliente ya creado
 POST http://localhost:3000/api/pets 
