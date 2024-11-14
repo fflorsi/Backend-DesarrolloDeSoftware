@@ -22,6 +22,9 @@ import { Appointment } from "./appointment/appointment.model.js";
 import {appointmentRouter} from "./appointment/appointment.routes.js";
 import "./association.js";
 import { typeRouter } from "./types/type.routes.js";
+import { Order } from "./order/order.model.js";
+import { OrderItem } from "./order/orderDetail.model.js";
+import { orderRouter } from "./order/order.routes.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -63,6 +66,8 @@ app.use('/api/appointments', appointmentRouter);
 
 app.use('/api/types', typeRouter)
 
+app.use('/api/orders', orderRouter)
+
 // Manejo de rutas no encontradas
 app.use((req, res) => {
   return res.status(404).send({ message: "Not found" });
@@ -80,6 +85,8 @@ app.use((req, res) => {
     await Facility.sync()
     await MedicalHistoryVaccine.sync()
     await Appointment.sync()
+    await Order.sync()
+    await OrderItem.sync()
     await sequelize.sync(); // Sincroniza todos los modelos con la base de datos
     console.log("Tablas sincronizadas correctamente");
 
