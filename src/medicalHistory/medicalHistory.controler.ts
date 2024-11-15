@@ -68,7 +68,7 @@ async function remove(req: Request, res: Response){
 
 async function findByPetId(req: Request, res: Response) {
   const id = req.params.id
-  const medicalHistory = await repository.findOne({id})
+  const medicalHistory = await repository.findByPetId({id})
   if(!medicalHistory){
     return res.status(404).send({message:'Medical History Not Found'})
   }

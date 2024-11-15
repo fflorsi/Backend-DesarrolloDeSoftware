@@ -19,6 +19,18 @@ public async findAll(): Promise<MedicalHistory[] | undefined> {
     return medicalHistories.map(medicalHistory => medicalHistory.toJSON() as MedicalHistory)
   }
 
+public async findByPetId(petId: { id: string }): Promise<MedicalHistory | undefined> {
+    const id = Number.parseInt(petId.id);
+    if (isNaN(id)) return undefined;
+    const medicalHistory = await MedicalHistoryModel.findOne({
+        where: { petId: id },
+        include: [{
+            model: VaccineModel,
+            through: { attributes: [] } // Esto excluye los atributos de la tabla intermedia
+        }]
+    });
+    return medicalHistory ? (medicalHistory.toJSON()) : undefined;
+}  
     
 
 public async findOne(medicalHistoryId: { id: string }): Promise<MedicalHistory | undefined> {
