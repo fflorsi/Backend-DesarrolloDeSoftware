@@ -70,7 +70,12 @@ export class observationRepository{
       public async findByMedicalHistory(item:{id: string}): Promise<observation[] | undefined> {
         const id = Number.parseInt(item.id)
         if (isNaN(id)) return undefined
-        const observations:observation[] = await ObservationModel.findAll({ where: { medicalHistoryId: id } })
+        const observations:observation[] = await ObservationModel.findAll({ where: { medicalHistoryId: id },
+        include: [{
+            model: ProfessionalModel, as: 'professionalData',
+            attributes: ['firstname', 'lastname']
+        }]
+    } )
 
         return observations ? (observations) : undefined
     }
