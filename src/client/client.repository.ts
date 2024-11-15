@@ -70,20 +70,34 @@ export class ClientRepository {
   }
 
   public async searchClientsByDNS(searchString: string): Promise<ClientInterface[] | null> {
-      try {
-          const clients = await ClientModel.findAll({
-              where: {
-                  [Op.or]: [
-                      { dni: { [Op.like]: `%${searchString}%` } },
-                      { firstname: { [Op.like]: `%${searchString}%` } },
-                      { lastname: { [Op.like]: `%${searchString}%` } },
-                  ],
-              },
-          });
-          return clients.map(client => client.toJSON() as ClientInterface) || null;
-      } catch (error) {
-          console.error('Error al buscar clientes:', error);
-          return null;
-      }
-  }
+    // Validar que searchString no sea nulo o vacío
+    if (!searchString || searchString.trim() === '') {
+        console.log('El término de búsqueda no puede estar vacío');
+        return null;
+    }
+
+    try {
+        // Realizar la búsqueda con Sequelize
+        const clients = await ClientModel.findAll({
+            where: {
+                [Op.or]: [
+                    { dni: { [Op.like]: `%${searchString}%` } },
+                    { firstname: { [Op.like]: `%${searchString}%` } },
+                    { lastname: { [Op.like]: `%${searchString}%` } }
+                ]
+            }
+        });
+
+        // Si se encontraron clientes, los retornamos en formato JSON
+        if (clients.length === 0) {
+            return null;  // Retornamos null si no se encuentran resultados
+        }
+
+        return clients.map(client => client.toJSON() as ClientInterface);  // Mapeamos a JSON
+
+    } catch (error) {
+        console.error('Error al buscar clientes:', error);
+        return null;  // Si ocurre un error, retornamos null
+    }
+}
 }

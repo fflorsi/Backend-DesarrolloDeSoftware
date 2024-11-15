@@ -3,11 +3,11 @@ import { sanitizeClientInput, findAll, findOne, add, update, remove, findClientA
 
 export const clientRouter = Router()
 
-
+clientRouter.get('/search/:searchString',searchClientsByDNS);
 clientRouter.get('/', findAll)
 clientRouter.get('/:id', findOne)
 clientRouter.post('/', sanitizeClientInput, add)
 clientRouter.put('/:id', sanitizeClientInput, update)
 clientRouter.delete('/:id', remove)
 clientRouter.get('/by-dni/:dni', findClientAndPetsByDni);
-clientRouter.get('/:a',searchClientsByDNS);
+

@@ -118,10 +118,15 @@ async function findClientAndPetsByDni(req: Request, res: Response) {
 
 async function searchClientsByDNS(req: Request, res: Response) {
   const { searchString } = req.params;
+
+  // Verificar que searchString no sea undefined o vacío
+  if (!searchString || searchString.trim() === '') {
+    return res.status(400).json({ message: 'El término de búsqueda no puede estar vacío.' });
+  }
+
   try {
       // Llamamos al servicio o método que implementa la búsqueda
       const clients = await repository.searchClientsByDNS(searchString);
-      console.log(clients) // Agregar await aquí
 
       // Verificamos si no se encontraron clientes
       if (!clients || clients.length === 0) {
