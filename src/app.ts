@@ -68,6 +68,8 @@ app.use('/api/types', typeRouter)
 
 app.use('/api/orders', orderRouter)
 
+
+
 // Manejo de rutas no encontradas
 app.use((req, res) => {
   return res.status(404).send({ message: "Not found" });
