@@ -6,12 +6,16 @@ import { Order } from './order/order.model.js';
 import { Product} from './product/product.model.js';
 import { OrderItem } from './order/orderDetail.model.js';
 import { Type } from './types/type.model.js';
+import { Observation } from './observation/observation.model.js';
 
 Pet.hasMany(Appointment, { foreignKey: 'petId' });
 Appointment.belongsTo(Pet, { foreignKey: 'petId' });
 
 Professional.hasMany(Appointment, { foreignKey: 'professionalId' });
 Appointment.belongsTo(Professional, { foreignKey: 'professionalId' });
+
+Professional.hasMany(Observation, {foreignKey: 'professional', as:'Observations'} )
+Observation.belongsTo(Professional, {foreignKey: 'professional', as: 'professionalData'})
 
 Facility.hasMany(Appointment, { foreignKey: 'facilityId' });
 Appointment.belongsTo(Facility, { foreignKey: 'facilityId' });

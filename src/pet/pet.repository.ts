@@ -23,7 +23,12 @@ export class PetRepository implements Repository<Pet>{
     public async findOne(item:{id:string}): Promise <Pet | undefined>{
         const id = Number.parseInt(item.id)
         if (isNaN(id)) return undefined
-        const pet = await PetModel.findByPk(id)
+        const pet = await PetModel.findByPk(id,{
+        include: [{
+            model: TypeModel,
+            attributes: ['name']
+        }]
+    })
 
         return pet ? (pet.toJSON()) : undefined
         
