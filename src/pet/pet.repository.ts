@@ -3,13 +3,19 @@ import { Pet } from "./pet.entity.js";
 import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Pet as PetModel } from "./pet.model.js";
+import { Type as TypeModel } from "../types/type.model.js";
 
 
 
 
 export class PetRepository implements Repository<Pet>{
     public async findAll(): Promise<Pet[]> {
-    const pets = await PetModel.findAll()
+    const pets = await PetModel.findAll({
+        include: [{
+            model: TypeModel,
+            attributes: ['name']
+        }]
+    })
     return pets.map(pet => pet.toJSON() as Pet)
     }
     

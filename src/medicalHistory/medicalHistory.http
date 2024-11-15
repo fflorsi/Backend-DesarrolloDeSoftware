@@ -33,10 +33,6 @@ Content-Type: application/json
 
 DELETE http://localhost:3000/api/medicalHistory/4
 
-###
-
-GET http://localhost:3000/api/medicalHistory/findOneWithVaccines/1
-
 
 ###
 POST http://localhost:3000/api/medicalHistory/4/vaccines
