@@ -81,10 +81,10 @@ async function remove(req: Request, res: Response) {
 }
 
 async function searchByName(req: Request, res: Response) {
-    const  name  = req.query.name;
+    let  name  = req.query.name;
     console.log(name)
     if (!name || typeof name !== 'string') {
-        return res.status(400).json({ message: 'Invalid name parameter' });
+        name = ''
     }
 
     const facilities = await repository.findByName(name);

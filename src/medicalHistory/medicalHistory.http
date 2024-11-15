@@ -39,18 +39,13 @@ GET http://localhost:3000/api/medicalHistory/findOneWithVaccines/1
 
 
 ###
-POST http://localhost:3000/api/medicalHistory/1/vaccines
+POST http://localhost:3000/api/medicalHistory/4/vaccines
 
 Content-Type: application/json
 
 {
-    "vaccineId": 9
+    "vaccineId": 3
 }
 
 ###
 DELETE http://localhost:3000/api/medicalHistory/7/vaccines?vaccineId=2
-
-Content-Type: application/json
-{
-    "vaccineId": 2
-}

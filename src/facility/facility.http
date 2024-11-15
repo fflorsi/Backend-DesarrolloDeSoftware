@@ -2,7 +2,7 @@
 GET http://localhost:3000/api/facilities
 
 ### obtener un servicio
-GET http://localhost:3000/api/facilities/11
+GET http://localhost:3000/api/facilities/13
 
 ### crear un nuevo servicio
 POST http://localhost:3000/api/facilities
@@ -36,4 +36,4 @@ DELETE http://localhost:3000/api/facilities/12
 
 
 ###
-GET http://localhost:3000/api/facilities/search?name=cons
+GET http://localhost:3000/api/facilities/search?name=
