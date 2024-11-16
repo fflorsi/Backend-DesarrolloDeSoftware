@@ -1,0 +1,39 @@
+### obtener todos los servicios
+GET http://localhost:3000/api/facilities
+
+### obtener un servicio
+GET http://localhost:3000/api/facilities/13
+
+### crear un nuevo servicio
+POST http://localhost:3000/api/facilities
+Content-Type: application/json
+
+{
+  "name": "Consulta Flor",
+  "description": "Consulta con especialista para casos complejos o de alta especialidad",
+  "price": 700
+}
+
+### modificar un servicio (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/facilities/11
+Content-Type: application/json
+
+{
+  "name": "Consulta Especializada",
+  "description": "Consulta con medico para casos complejos o de alta especialidad",
+  "price": 800
+}
+
+### modificar un servicio (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/facility/id
+Content-Type: application/json
+{
+    "price": 600
+    }
+
+### borrar un servicio
+DELETE http://localhost:3000/api/facilities/12
+
+
+###
+GET http://localhost:3000/api/facilities/search?name=

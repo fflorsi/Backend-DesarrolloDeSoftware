@@ -1,0 +1,29 @@
+#coverage report
+coverage
+# API keys and secrets
+.env
+
+#dependency directories
+node_modules
+api
+
+#OS metadata
+.OS_Store
+Thumbs.db
+
+#ignore built ts files
+dist/**/*
+
+# vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscoe/*.code-snippets
+
+# local jistory for vscode
+.history/
+
+#built vscode extensions
+*.vsix

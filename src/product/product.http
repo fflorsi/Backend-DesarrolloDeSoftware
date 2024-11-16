@@ -1,0 +1,29 @@
+### obtener todos los productos
+GET http://localhost:3000/api/products
+
+
+### obtener un producto
+GET http://localhost:3000/api/products/
+
+
+
+### crear un nuevo producto
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+
+
+### modificar un producto (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/products/
+Content-Type: application/json
+
+
+### modificar un producto (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/products/
+Content-Type: application/json
+
+
+
+### borrar un producto
+DELETE http://localhost:3000/api/products/
+
