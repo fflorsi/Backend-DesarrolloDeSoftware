@@ -1,10 +1,11 @@
 import { Sequelize } from "sequelize";
+import { config } from "dotenv";
 
-
-const sequelize = new Sequelize('veterinary', 'avnadmin', 'AVNS_EazmPwvXfgYJy-zzvSW', {
-    host: 'mysql-veterinary-veterinary.j.aivencloud.com',
-    dialect: 'mysql',
-    port: 16432
+config()
+const sequelize = new Sequelize(process.env.DB_NAME as string, process.env.DB_USER as string, process.env.DB_PASSWORD as string, {
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT as any,
+    port: Number(process.env.DB_PORT)
 });
 
 export default sequelize;

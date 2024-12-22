@@ -73,7 +73,6 @@ export const getFutureAppointments = async (req: Request, res: Response): Promis
 
 // Función para listar todos los turnos
 export const getAllAppointments = async (req: Request, res: Response): Promise<Response> => {
-  console.log("el rap del cp")
   try {
     const appointments = await Appointment.findAll();
     return res.status(200).json({ message: 'Todos los turnos', data: appointments });
@@ -156,7 +155,6 @@ export const getFutureAppointmentsWithDetails = async (req: Request, res: Respon
         }
       ]
     });
-    console.log(futureAppointments)
     res.json(futureAppointments);
   } catch (error) {
     const err = error as Error;
