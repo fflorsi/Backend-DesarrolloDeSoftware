@@ -1,6 +1,5 @@
 import { Repository } from "../shared/repository.js";
 import { MedicalHistory } from "./medicalHistory.entity.js";
-import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { observation } from "../observation/observations.entity.js";
 import { MedicalHistory as MedicalHistoryModel } from "./medicalHistory.model.js";

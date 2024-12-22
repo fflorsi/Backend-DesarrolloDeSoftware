@@ -1,6 +1,5 @@
 import { Repository } from "../shared/repository.js";
 import { observation } from "./observations.entity.js";
-import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Observation as ObservationModel } from "./observation.model.js";
 import { Professional as ProfessionalModel } from "../professional/professional.model.js";

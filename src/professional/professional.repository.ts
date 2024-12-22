@@ -1,6 +1,5 @@
 import { Repository } from "../shared/repository.js";
 import { Professional as ProfessionalInterface } from "./professionals.entity.js";
-import { pool } from "../shared/db/conn.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Sequelize } from "sequelize";
 import { Professional as ProfessionalModel } from '../professional/professional.model.js';
