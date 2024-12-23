@@ -7,9 +7,9 @@
     "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/app.js\""
   },
   "dependencies": {
-    "2": "^3.0.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "git-http": "^0.1.1",
     "jsonwebtoken": "^9.0.2",
