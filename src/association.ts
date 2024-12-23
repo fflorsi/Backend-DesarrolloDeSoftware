@@ -7,6 +7,7 @@ import { Product} from './product/product.model.js';
 import { OrderItem } from './order/orderDetail.model.js';
 import { Type } from './types/type.model.js';
 import { Observation } from './observation/observation.model.js';
+import { User } from './user/user.model.js';
 
 Pet.hasMany(Appointment, { foreignKey: 'petId' });
 Appointment.belongsTo(Pet, { foreignKey: 'petId' });
@@ -40,3 +41,5 @@ Order.hasMany(OrderItem, {
     as: 'product',
   });
 
+  Professional.hasOne(User, { foreignKey: 'professionalId' });
+  User.belongsTo(Professional, { foreignKey: 'professionalId' });

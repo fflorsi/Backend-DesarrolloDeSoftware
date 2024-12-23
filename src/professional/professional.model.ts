@@ -1,42 +1,72 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/connection.js';
 
-export const Professional = sequelize.define('professional', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    dni: {
+interface ProfessionalAttributes {
+    id: number;
+    dni: string;
+    firstname: string;
+    lastname: string;
+    address: string;
+    phone: string;
+    email: string;
+    birthDate: Date;
+}
+
+interface ProfessionalCreationAttributes extends Optional<ProfessionalAttributes, 'id'> {}
+
+export class Professional extends Model<ProfessionalAttributes, ProfessionalCreationAttributes> implements ProfessionalAttributes {
+    public id!: number;
+    public dni!: string;
+    public firstname!: string;
+    public lastname!: string;
+    public address!: string;
+    public phone!: string;
+    public email!: string;
+    public birthDate!: Date;
+}
+
+
+
+Professional.init(
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        dni: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         firstname: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         lastname: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         address: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         phone: {
             type: DataTypes.STRING(30),
-            allowNull: false
+            allowNull: false,
         },
         email: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         birthDate: {
             type: DataTypes.DATE,
-            allowNull: false
-        }
-}, {
-    timestamps: true, // Habilita createdAt y updatedAt
-    tableName: 'professionals' 
-});
-
+            allowNull: false,
+        },
+    },
+    {
+        sequelize,
+        modelName: 'Professional',
+        tableName: 'professionals',
+        timestamps: true, // Habilita createdAt y updatedAt
+    }
+);

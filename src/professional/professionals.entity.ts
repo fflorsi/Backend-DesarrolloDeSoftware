@@ -6,7 +6,7 @@ export class Professional{
         public address: string, 
         public phone: string,
         public email: string,
-        public birthDate: string,
+        public birthDate: Date,
         public id?: number,
      ) {}
 }

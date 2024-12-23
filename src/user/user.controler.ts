@@ -2,6 +2,7 @@ import {Request, Response} from 'express';
 import bcrypt from 'bcrypt';
 import {User} from './user.model.js';
 import { Client } from '../client/client.model.js';
+import { Professional } from '../professional/professional.model.js';
 import jwt from 'jsonwebtoken';
 import sequelize from '../db/connection.js';
 
@@ -56,8 +57,7 @@ export const newUser = async (req: Request, res: Response) => {
 
         // Crear usuario
         await User.create(
-            {
-                username,
+            { username,
                 password: hashedPassword,
                 clientId: client.id 
             },
@@ -90,32 +90,128 @@ export const newUser = async (req: Request, res: Response) => {
     }
 }
 
-export const loginUser = async (req: Request, res:Response) =>{
-  console.log(req.body)
+export const loginUser  = async (req: Request, res: Response) => {
+    const { username, password } = req.body;
 
-  const { username, password } = req.body;
+    try {
+        if (!username || !password) {
+            return res.status(400).json({
+                msg: 'Debe proporcionar un nombre de usuario y una contraseña',
+            });
+        }
 
-   // Validamos si el usuario existe en la base de datos
-   const user: any = await User.findOne({ where: { username: username } });
+        const user: any = await User.findOne({ where: { username } });
+        if (!user) {
+            return res.status(404).json({
+                msg: 'No existe un usuario con ese nombre de usuario',
+            });
+        }
 
-   if(!user) {
-        return res.status(400).json({
-            msg: `No existe un usuario con el nombre ${username} en la base datos`
-        })
-   }
+        const passwordValid = await bcrypt.compare(password, user.password);
+        if (!passwordValid) {
+            return res.status(400).json({
+                msg: 'Contraseña incorrecta',
+            });
+        }
 
-   // Validamos password
-   const passwordValid = await bcrypt.compare(password, user.password)
-   if(!passwordValid) {
-    return res.status(400).json({
-        msg: `Contraseña Incorrecta`
-    })
-   }
+        const token = jwt.sign(
+            {
+                id: user.id,
+                username: user.username,
+                role: user.role,
+            },
+            process.env.SECRET_KEY || 'pepito123',
+            { expiresIn: '1h' }
+        );
 
-   // Generamos token
-   const token = jwt.sign({
-    username: username
-   }, process.env.SECRET_KEY || 'pepito123');
-   
-   res.json(token);
+        return res.status(200).json({
+            msg: 'Inicio de sesión exitoso',
+            token,
+            user: {
+                id: user.id,
+                username: user.username,
+                role: user.role,
+            },
+        });
+    } catch (error) {
+        console.error('Error durante el inicio de sesión:', error);
+        return res.status(500).json({
+            msg: 'Ocurrió un error durante el inicio de sesión. Por favor, inténtelo de nuevo más tarde.',
+        });
+    }
+}
+
+
+export const createProfessionalUser = async (req: Request, res:Response) => {
+    const { username, password, professionalId } = req.body;
+
+    try {
+        // 1. Validar que el professionalId exista
+        const professional = await Professional.findByPk(professionalId);
+        if (!professional) {
+            return res.status(404).json({
+                msg: 'El profesional no existe',
+            });
+        }
+
+        // 2. Validar que el username no esté ya en uso
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(400).json({
+                msg: 'El nombre de usuario ya está en uso',
+            });
+        }
+
+        // 3. Crear el usuario con el role "professional"
+        const newUser = await User.create({
+            username,
+            password, // Asegúrate de hashear la contraseña antes de guardarla
+            role: 'professional',
+            professionalId,
+        });
+
+        return res.status(201).json({
+            msg: 'Usuario profesional creado con éxito',
+            user: newUser,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            msg: 'Ocurrió un error al crear el usuario profesional',
+        });
+    }
+}
+
+export const fetchUserProfile = async (req: Request, res: Response) => {
+    try {
+        // Asegúrate de que el middleware ya haya validado el token y cargado el usuario en req.user
+        if (!req.user) {
+            return res.status(401).json({ msg: 'Usuario no autenticado' });
+        }
+
+        // Extrae los datos del usuario desde req.user
+        const user = req.user;
+
+        // Retorna la información del perfil según el rol
+        if (user.role === 'client') {
+            return res.json({
+                id: user.id,
+                username: user.username,
+                role: user.role,
+                clientId: user.clientId, // En el caso de un cliente, este es relevante
+            });
+        } else if (user.role === 'professional') {
+            return res.json({
+                id: user.id,
+                username: user.username,
+                role: user.role,
+                professionalId: user.professionalId, // En el caso de un profesional
+            });
+        }
+
+        return res.status(400).json({ msg: 'Rol de usuario no reconocido' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Error al obtener el perfil del usuario' });
+    }
 }

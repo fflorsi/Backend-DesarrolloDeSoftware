@@ -70,14 +70,12 @@ export class ClientRepository {
   }
 
   public async searchClientsByDNS(searchString: string): Promise<ClientInterface[] | null> {
-    // Validar que searchString no sea nulo o vacío
     if (!searchString || searchString.trim() === '') {
         console.log('El término de búsqueda no puede estar vacío');
         return null;
     }
 
     try {
-        // Realizar la búsqueda con Sequelize
         const clients = await ClientModel.findAll({
             where: {
                 [Op.or]: [
@@ -88,16 +86,15 @@ export class ClientRepository {
             }
         });
 
-        // Si se encontraron clientes, los retornamos en formato JSON
         if (clients.length === 0) {
-            return null;  // Retornamos null si no se encuentran resultados
+            return null;  
         }
 
-        return clients.map(client => client.toJSON() as ClientInterface);  // Mapeamos a JSON
+        return clients.map(client => client.toJSON() as ClientInterface);  
 
     } catch (error) {
         console.error('Error al buscar clientes:', error);
-        return null;  // Si ocurre un error, retornamos null
+        return null;  
     }
 }
 }

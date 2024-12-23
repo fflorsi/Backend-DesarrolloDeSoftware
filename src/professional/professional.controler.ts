@@ -5,7 +5,7 @@ import { Professional } from "./professionals.entity.js";
 const repository = new ProfessionalRepository();
 
 function sanitizeProfessionalInput(req: Request, res: Response, next: NextFunction) {
-    const sanitizedInput: Partial<Professional> = {
+    req.body.sanitizedInput = {
         dni: req.body.dni,
         lastname: req.body.lastname,
         firstname: req.body.firstname,
@@ -16,16 +16,14 @@ function sanitizeProfessionalInput(req: Request, res: Response, next: NextFuncti
         id: req.body.id
     };
 
-    // Remueve cualquier campo no definido o inválido
-    (Object.keys(sanitizedInput) as Array<keyof Professional>).forEach((key) => {
-        if (sanitizedInput[key] === undefined || sanitizedInput[key] === '') {
-            delete sanitizedInput[key];
-        }
-    });
     
-
-    req.body.sanitizedInput = sanitizedInput;
-    next();
+    Object.keys(req.body.sanitizedInput).forEach((key) => {
+        if (req.body.sanitizedInput[key] === undefined) {
+          delete req.body.sanitizedInput[key]
+        }
+      })
+      next()
+    
 }
 
 async function findAll(req: Request, res: Response) {
@@ -39,18 +37,19 @@ async function findAll(req: Request, res: Response) {
 }
 
 async function findOne(req: Request, res: Response) {
-    const id = req.params.id;
-    try {
-        const professional = await repository.findOne({ id });
-        if (!professional) {
-            return res.status(404).send({ message: 'Professional not found' });
-        }
-        res.json({ data: professional });
-    } catch (error) {
-        console.error('Error fetching professional by ID:', error);
-        res.status(500).json({ message: 'Unable to fetch professional' });
+    const id = Number.parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).send({ message: 'Invalid id parameter' });
     }
-}
+  
+    // Cambiamos la consulta para que use la cadena `id` en lugar del número directamente
+    const professional = await repository.findOne({ id: id.toString() });
+    if (!professional) {
+      return res.status(404).send({ message: 'Professional not found findOne' });
+    }
+  
+    res.json({ data: professional });
+  }
 
 async function add(req: Request, res: Response) {
     const input = req.body.sanitizedInput;
@@ -90,17 +89,13 @@ async function update(req: Request, res: Response) {
 }
 
 async function remove(req: Request, res: Response) {
-    const id = req.params.id;
-    try {
-        const professional = await repository.delete({ id });
-        if (!professional) {
-            return res.status(404).send({ message: 'Professional not found' });
+    const { id } = req.params;
+    const professional = await repository.delete({ id });
+
+    if (!professional) {
+        return res.status(404).send({ message: 'Professional not found' });
         }
         res.status(200).send({ message: 'Professional deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting professional:', error);
-        res.status(500).json({ message: 'Unable to delete professional' });
-    }
 }
 
 export { sanitizeProfessionalInput, findAll, findOne, add, update, remove };

@@ -25,6 +25,7 @@ import { typeRouter } from "./types/type.routes.js";
 import { Order } from "./order/order.model.js";
 import { OrderItem } from "./order/orderDetail.model.js";
 import { orderRouter } from "./order/order.routes.js";
+import { User } from "./user/user.model.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -89,7 +90,8 @@ app.use((req, res) => {
     await Appointment.sync()
     await Order.sync()
     await OrderItem.sync()
-    await sequelize.sync(); // Sincroniza todos los modelos con la base de datos
+    await User.sync()
+    await sequelize.sync(); 
     console.log("Tablas sincronizadas correctamente");
 
     // Inicia el servidor
