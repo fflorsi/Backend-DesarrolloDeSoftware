@@ -119,6 +119,7 @@ export const loginUser  = async (req: Request, res: Response) => {
                 id: user.id,
                 username: user.username,
                 role: user.role,
+                clientId: user.clientId
             },
             process.env.SECRET_KEY || 'pepito123',
             { expiresIn: '1h' }
@@ -214,4 +215,27 @@ export const fetchUserProfile = async (req: Request, res: Response) => {
         console.error(error);
         res.status(500).json({ msg: 'Error al obtener el perfil del usuario' });
     }
+
 }
+
+export const getUserByUsername = async (req: Request, res: Response) => {
+    try {
+        const username = req.query.username as string;
+
+        if (!username) {
+            return res.status(400).json({ message: 'El parámetro username es obligatorio.' });
+        }
+
+        const user = await User.findOne({ where: { username } });
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error('Error al obtener el usuario:', error);
+        res.status(500).json({ message: 'Ocurrió un error al buscar el usuario.' });
+    }
+
+    }
