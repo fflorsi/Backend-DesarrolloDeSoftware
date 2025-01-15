@@ -4,11 +4,10 @@ import { Router } from 'express'
 import {
   createAppointment,
   updateAppointmentState,
-  getFutureAppointments,
-  getAllAppointments,
   getAppointmentsByState,
   getAllAppointmentsWithDetails,
-  getFutureAppointmentsWithDetails
+  getFutureAppointmentsWithDetails,
+  getFutureAppointmentsWithDetailsByClientId
 } from '../appointment/appointment.controler.js'; // Importa las funciones del controlador
 
 export const appointmentRouter = Router();
@@ -33,5 +32,5 @@ appointmentRouter.get('/', getAllAppointmentsWithDetails);
 // Ruta para obtener los turnos futuros con detalles
 appointmentRouter.get('/future', getFutureAppointmentsWithDetails);
 
-
+appointmentRouter.get('/future/:clientId',getFutureAppointmentsWithDetailsByClientId)
 

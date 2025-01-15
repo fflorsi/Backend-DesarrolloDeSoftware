@@ -24,7 +24,6 @@ export const newUser = async (req: Request, res: Response) => {
         });
     }
 
-    console.log('Datos recibidos:', req.body);
 
     // Validar Usuario
     const userNew = await User.findOne({ where: { username } });
@@ -239,3 +238,67 @@ export const getUserByUsername = async (req: Request, res: Response) => {
     }
 
     }
+
+    export const updateUsername = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const { username } = req.body;
+    
+        if (!username) {
+            return res.status(400).json({ msg: 'El nuevo nombre de usuario es requerido.' });
+        }
+    
+        try {
+            const existingUser = await User.findOne({ where: { username } });
+    
+            // Verificar que el usuario encontrado no sea el mismo que se está actualizando
+            if (existingUser && existingUser.dataValues.id !== parseInt(id)) {
+                return res.status(400).json({ msg: `El nombre de usuario ${username} ya está en uso.` });
+            }
+    
+            // Actualizar el nombre de usuario
+            const [updated] = await User.update(
+                { username },
+                { where: { id } }
+            );
+    
+            if (updated === 0) {
+                return res.status(404).json({ msg: 'Usuario no encontrado.' });
+            }
+    
+            res.json({ msg: 'Nombre de usuario actualizado exitosamente.' });
+        } catch (error) {
+            console.error('Error al actualizar el nombre de usuario:', error);
+            res.status(500).json({ msg: 'Error interno del servidor.' });
+        }
+    };
+    
+
+    export const updatePassword = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const { password } = req.body;
+    
+        if (!password) {
+            return res.status(400).json({ msg: 'La nueva contraseña es requerida.' });
+        }
+    
+        try {
+            // Hashear la nueva contraseña
+            const hashedPassword = await bcrypt.hash(password, 10);
+    
+            // Actualizar la contraseña del usuario
+            const user = await User.update(
+                { password: hashedPassword },
+                { where: { id } }
+            );
+    
+            if (user[0] === 0) {
+                return res.status(404).json({ msg: 'Usuario no encontrado.' });
+            }
+    
+            res.json({ msg: 'Contraseña actualizada exitosamente.' });
+        } catch (error) {
+            console.error('Error al actualizar la contraseña:', error);
+            res.status(500).json({ msg: 'Error interno del servidor.' });
+        }
+    };
+        

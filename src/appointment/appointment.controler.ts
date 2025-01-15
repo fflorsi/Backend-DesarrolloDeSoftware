@@ -161,7 +161,60 @@ export const getFutureAppointmentsWithDetails = async (req: Request, res: Respon
     console.error("Error in getFutureAppointmentsWithDetails:", err.message);
     res.status(500).json({ message: 'Error fetching future appointments', error: err.message });
   }
-};
+
+}
+  export const getFutureAppointmentsWithDetailsByClientId = async (req: Request, res: Response): Promise<void> => {
+    const { clientId } = req.params; // Suponiendo que idCliente viene en los parámetros de la URL
+    const now = new Date();
+    
+    try {
+      // Paso 1: Obtener todas las mascotas del cliente
+      const pets = await Pet.findAll({
+        where: {
+          clientId: clientId, // Filtrar por el idCliente en las mascotas
+        }
+      });
+  
+      // Paso 2: Verificar si el cliente tiene mascotas
+      if (pets.length === 0) {
+        res.status(404).json({ message: 'No se encontraron mascotas para este cliente' });
+        return;
+      }
+  
+      // Paso 3: Obtener los turnos futuros de esas mascotas
+      const futureAppointments = await Appointment.findAll({
+        group: ['Appointment.id'],
+        where: {
+          dateTime: { [Op.gt]: now }, // Solo turnos futuros
+          state: { [Op.eq]: 'scheduled' }, // Solo turnos con estado 'scheduled'
+          petId: { [Op.in]: pets.map((pet: any) => pet.id) }, // Filtrar turnos por las mascotas del cliente
+        },
+        include: [
+          { 
+            model: Pet,
+            attributes: ['id', 'name']
+          },
+          { 
+            model: Professional,
+            attributes: ['id', 'firstname', 'lastname']
+          },
+          { 
+            model: Facility,
+            attributes: ['id', 'name']
+          }
+        ]
+      });
+  
+      // Paso 4: Enviar los turnos futuros encontrados
+      res.json(futureAppointments);
+      
+    } catch (error) {
+      const err = error as Error;
+      console.error("Error in getFutureAppointmentsWithDetails:", err.message);
+      res.status(500).json({ message: 'Error fetching future appointments', error: err.message });
+    }
+  };
+
 
 
 
