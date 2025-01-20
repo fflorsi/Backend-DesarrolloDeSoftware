@@ -118,7 +118,8 @@ export const loginUser  = async (req: Request, res: Response) => {
                 id: user.id,
                 username: user.username,
                 role: user.role,
-                clientId: user.clientId
+                clientId: user.clientId,
+                professionalId: user.professionalId,  
             },
             process.env.SECRET_KEY || 'pepito123',
             { expiresIn: '1h' }
@@ -165,7 +166,7 @@ export const createProfessionalUser = async (req: Request, res:Response) => {
         // 3. Crear el usuario con el role "professional"
         const newUser = await User.create({
             username,
-            password, // Asegúrate de hashear la contraseña antes de guardarla
+            password, 
             role: 'professional',
             professionalId,
         });

@@ -7,7 +7,8 @@ import {
   getAppointmentsByState,
   getAllAppointmentsWithDetails,
   getFutureAppointmentsWithDetails,
-  getFutureAppointmentsWithDetailsByClientId
+  getFutureAppointmentsWithDetailsByClientId,
+  getFutureAppointmentsByProfessionalId,
 } from '../appointment/appointment.controler.js'; // Importa las funciones del controlador
 
 export const appointmentRouter = Router();
@@ -33,4 +34,6 @@ appointmentRouter.get('/', getAllAppointmentsWithDetails);
 appointmentRouter.get('/future', getFutureAppointmentsWithDetails);
 
 appointmentRouter.get('/future/:clientId',getFutureAppointmentsWithDetailsByClientId)
+
+appointmentRouter.get('/profapp/:professionalId',getFutureAppointmentsByProfessionalId)
 

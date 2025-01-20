@@ -215,6 +215,58 @@ export const getFutureAppointmentsWithDetails = async (req: Request, res: Respon
     }
   };
 
+  export const getFutureAppointmentsByProfessionalId = async (req: Request, res: Response): Promise<void> => {
+    const { professionalId } = req.params; // Suponiendo que professionalId viene en los parámetros de la URL
+    const now = new Date();
+  
+    // Convertir professionalId a número si es necesario
+    const professionalIdNumber = parseInt(professionalId, 10)
 
+    try {
+      // Verificar si el professionalId es válido
+      if (isNaN(professionalIdNumber)) {
+        res.status(400).json({ message: 'ID del profesional no es válido' });
+        return;
+      }
+      // Paso 1: Obtener los turnos futuros asignados al profesional
+      const futureAppointments = await Appointment.findAll({
+        where: {
+          dateTime: { [Op.gt]: now },
+          state: 'scheduled',
+          professionalId: professionalIdNumber,
+        },
+        include: [
+          {
+            model: Pet,
+            attributes: ['id', 'name'],
+          },
+          {
+            model: Professional,
+            attributes: ['id', 'firstname', 'lastname'],
+          },
+          {
+            model: Facility,
+            attributes: ['id', 'name'],
+          },
+        ],
+      });
+      console.log(futureAppointments);
+
+      // Paso 2: Verificar si se encontraron turnos
+      if (futureAppointments.length === 0) {
+        res.status(404).json({ message: 'No se encontraron turnos futuros para este profesional' });
+        return;
+      }
+  
+      // Paso 3: Enviar los turnos futuros encontrados
+      res.json(futureAppointments);
+  
+    } catch (error) {
+      const err = error as Error;
+      console.error("Error in getFutureAppointmentsByProfessionalId: ", err.message);
+      res.status(500).json({ message: 'Error fetching future appointments', error: err.message });
+    }
+  };
+  
 
 
