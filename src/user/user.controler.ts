@@ -302,4 +302,35 @@ export const getUserByUsername = async (req: Request, res: Response) => {
             res.status(500).json({ msg: 'Error interno del servidor.' });
         }
     };
-        
+
+    export const createAdminUser = async (req: Request, res: Response) => {
+        const { username, password } = req.body;
+    
+        try {
+            // 1. Validar que el username no esté ya en uso
+            const existingUser = await User.findOne({ where: { username } });
+            if (existingUser) {
+                return res.status(400).json({
+                    msg: 'El nombre de usuario ya está en uso',
+                });
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+            // 2. Crear el usuario con el role "admin"
+            const newAdmin = await User.create({
+                username,
+                password: hashedPassword, 
+                role: 'admin',
+            });
+    
+            return res.status(201).json({
+                msg: 'Usuario administrador creado con éxito',
+                user: newAdmin,
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                msg: 'Ocurrió un error al crear el usuario administrador',
+            });
+        }
+    };
