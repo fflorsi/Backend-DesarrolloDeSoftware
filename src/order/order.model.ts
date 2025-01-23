@@ -1,10 +1,11 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import  sequelize  from '../db/connection.js';
+import sequelize from '../db/connection.js';
 
 interface OrderAttributes {
   id: number;
   total: number;
   date: Date;
+  clientId: number;
 }
 
 interface OrderCreationAttributes extends Optional<OrderAttributes, 'id' | 'date'> {}
@@ -13,6 +14,7 @@ export class Order extends Model<OrderAttributes, OrderCreationAttributes> imple
   public id!: number;
   public total!: number;
   public date!: Date;
+  public clientId!: number;
 }
 
 Order.init(
@@ -29,6 +31,16 @@ Order.init(
     date: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
+    },
+    clientId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'clients', 
+        key: 'id', 
+      },
+      onUpdate: 'CASCADE', 
+      onDelete: 'CASCADE', 
     },
   },
   {
