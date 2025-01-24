@@ -26,6 +26,7 @@ import { Order } from "./order/order.model.js";
 import { OrderItem } from "./order/orderDetail.model.js";
 import { orderRouter } from "./order/order.routes.js";
 import { User } from "./user/user.model.js";
+import { paymentRouter } from "./payment/payment.routes.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -69,6 +70,9 @@ app.use('/api/types', typeRouter)
 
 app.use('/api/orders', orderRouter)
 
+//pago
+
+app.use('/api/payment', paymentRouter)
 
 
 // Manejo de rutas no encontradas
