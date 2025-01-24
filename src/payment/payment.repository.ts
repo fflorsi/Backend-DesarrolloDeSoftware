@@ -1,4 +1,4 @@
-export interface Paymentresponse {
+export interface PaymentResponse {
   collection_id: string
   collection_status: string
   payment_id: string
