@@ -27,6 +27,8 @@ import { OrderItem } from "./order/orderDetail.model.js";
 import { orderRouter } from "./order/order.routes.js";
 import { User } from "./user/user.model.js";
 import { paymentRouter } from "./payment/payment.routes.js";
+import { report } from "process";
+import { reportRouter } from "./report/report.routes.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -74,6 +76,8 @@ app.use('/api/orders', orderRouter)
 
 app.use('/api/payment', paymentRouter)
 
+//reportes
+app.use('/api/report',reportRouter)
 
 // Manejo de rutas no encontradas
 app.use((req, res) => {
