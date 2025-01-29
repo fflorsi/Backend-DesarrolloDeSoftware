@@ -2,7 +2,15 @@ import { Request, Response } from 'express';
 import { Order } from '../order/order.model.js';
 import { Appointment } from '../appointment/appointment.model.js';
 import { Facility } from '../facility/facility.model.js';
+import { OrderItem } from '../order/orderDetail.model.js';
+import { Product } from '../product/product.model.js';
+import { Professional } from '../professional/professional.model.js';
+import { Client } from '../client/client.model.js';
+import { Pet } from '../pet/pet.model.js';
 import { Sequelize } from 'sequelize';
+import { Op, fn, col } from 'sequelize';
+
+
 
 // Ejemplo: Obtener ingresos mensuales
 export const getMonthlyEarnings = async (req: Request, res: Response) => {
@@ -94,6 +102,149 @@ export const getMostRequestedServices = async (req: Request, res: Response) => {
       res.status(500).json({ message: 'Error fetching most requested services' });
   }
 };
+
+export const getMostSoldProducts = async (req: Request, res: Response) => {
+  try {
+    const mostSoldProducts = await OrderItem.findAll({
+      attributes: [
+        'productId',
+        [Sequelize.fn('SUM', Sequelize.col('quantity')), 'totalQuantity'], // Suma la cantidad de productos vendidos
+      ],
+      include: [
+        {
+          model: Product,
+          as: 'product', // Usa el alias definido en la asociación
+          attributes: ['name'], // Solo incluye el nombre del producto
+        },
+      ],
+      group: ['productId', 'product.id'], // Agrupa por el ID del producto y su relación
+      order: [[Sequelize.fn('SUM', Sequelize.col('quantity')), 'DESC']], // Ordena por la cantidad total en orden descendente
+    });
+
+    res.status(200).json(mostSoldProducts);
+  } catch (error) {
+    console.error('Error fetching most sold products:', error);
+    res.status(500).json({ error: 'Error fetching most sold products' });
+  }
+
+  
+};
+
+
+export const getRegisteredClientsAndPets = async (req: Request, res: Response) => {
+  try {
+      const totalClients = await Client.count();
+
+      const totalPets = await Pet.count();
+
+      const clientsByMonth = await Client.findAll({
+          attributes: [
+              [Sequelize.fn('DATE_FORMAT', Sequelize.col('createdAt'), '%Y-%m-01'), 'month'],  
+          ],
+          group: ['month'],
+          order: [['month', 'ASC']],
+      });
+
+      const petsByMonth = await Pet.findAll({
+          attributes: [
+              [Sequelize.fn('DATE_FORMAT', Sequelize.col('createdAt'), '%Y-%m-01'), 'month'],  
+              [Sequelize.fn('COUNT', Sequelize.col('id')), 'count']
+          ],
+          group: ['month'],
+          order: [['month', 'ASC']],
+      });
+
+      const clientsFormatted = clientsByMonth.map((client: any) => ({
+          month: client.dataValues.month,
+          totalClients: parseInt(client.dataValues.count, 10), 
+      }));
+
+      const petsFormatted = petsByMonth.map((pet: any) => ({
+          month: pet.dataValues.month,
+          totalPets: parseInt(pet.dataValues.count, 10), 
+      }));
+
+      const combinedData = clientsFormatted.map((client) => {
+          const petData = petsFormatted.find((pet) => pet.month === client.month);
+          return {
+              month: client.month,
+              totalClients: client.totalClients,
+              totalPets: petData ? petData.totalPets : 0, 
+          };
+      });
+
+      petsFormatted.forEach((pet) => {
+          if (!combinedData.some((data) => data.month === pet.month)) {
+              combinedData.push({
+                  month: pet.month,
+                  totalClients: 0, 
+                  totalPets: pet.totalPets,
+              });
+          }
+      });
+
+      combinedData.sort((a, b) => new Date(a.month).getTime() - new Date(b.month).getTime());
+
+      const report = {
+          totalClients,
+          totalPets,
+          monthlyData: combinedData,
+      };
+
+      return res.status(200).json(report);
+
+  } catch (error) {
+      console.error('Error al generar el reporte:', error);
+      return res.status(500).json({ message: 'Error al generar el reporte' });
+  }
+};
+
+export const getMostActiveProfessionals = async (req: Request, res: Response) => {
+  try {
+    const activeProfessionals = await Appointment.findAll({
+      attributes: [
+        'professionalId',  
+        [Sequelize.fn('COUNT', Sequelize.col('Appointment.id')), 'turnsCount'], 
+      ],
+      group: ['professionalId'], 
+      order: [[Sequelize.fn('COUNT', Sequelize.col('Appointment.id')), 'DESC']], 
+      include: [
+        {
+          model: Professional,  
+          attributes: ['id', 'firstname', 'lastname', 'dni'], 
+          required: true,  
+        }
+      ]
+    });
+
+    const professionalsFormatted = activeProfessionals.map((appointment: any) => {
+      const professionalData = appointment.Professional; 
+      if (professionalData) {
+        return {
+          professionalId: appointment.professionalId,
+          professionalName: `${professionalData.firstname} ${professionalData.lastname}`,
+          professionalDni: professionalData.dni,
+          turnsAssigned: parseInt(appointment.getDataValue('turnsCount'), 10), 
+        };
+      } else {
+        return null;  
+      }
+    }).filter(item => item !== null);  
+
+    return res.status(200).json({ mostActiveProfessionals: professionalsFormatted });
+
+  } catch (error: unknown) { 
+    if (error instanceof Error) {
+      console.error('Error al generar el reporte de profesionales más activos:', error.message);
+      return res.status(500).json({ message: 'Error al generar el reporte de profesionales más activos', error: error.message });
+    } else {
+      console.error('Error desconocido:', error);
+      return res.status(500).json({ message: 'Error desconocido al generar el reporte de profesionales más activos' });
+    }
+  }
+};
+
+
 
 
 
