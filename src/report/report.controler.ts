@@ -245,8 +245,76 @@ export const getMostActiveProfessionals = async (req: Request, res: Response) =>
 };
 
 
+export const getAppointmentsByProfessional = async (req: Request, res: Response) => {
+  try {
+      const { professionalId } = req.params;
+      const { period, month } = req.query; // "month" o "day" y el mes en formato YYYY-MM
+
+      if (!professionalId) {
+          return res.status(400).json({ message: "Falta el ID del profesional." });
+      }
+
+      let whereCondition: any = { professionalId };
+
+      // Si se busca por día, filtramos por el mes seleccionado
+      if (period === "day" && month) {
+          whereCondition.dateTime = {
+              [Op.between]: [`${month}-01`, `${month}-31`]
+          };
+      }
+
+      // Agrupamos por mes o día según la consulta
+      const dateFormat = period === "day"
+          ? Sequelize.fn('DATE_FORMAT', Sequelize.col('dateTime'), '%Y-%m-%d') // Agrupar por día
+          : Sequelize.fn('DATE_FORMAT', Sequelize.col('dateTime'), '%Y-%m'); // Agrupar por mes
+
+      // Consultamos los turnos
+      const appointments = await Appointment.findAll({
+          attributes: [
+              [dateFormat, 'date'], 
+              [Sequelize.fn('COUNT', Sequelize.col('id')), 'count']
+          ],
+          where: whereCondition,
+          group: ['date'],
+          order: [['date', 'ASC']]
+      });
+      return res.json(appointments);
+  } catch (error) {
+      console.error("Error al obtener los turnos del profesional:", error);
+      res.status(500).json({ message: "Error en el servidor." });
+  }
+};
 
 
+export const getMostAttendedFacilities = async (req: Request, res: Response) => {
+  try {
+    const { professionalId } = req.params;
 
+    if (!professionalId) {
+      return res.status(400).json({ message: "Falta el ID del profesional." });
+    }
+
+    // Consultamos las facilities más atendidas
+    const facilities = await Appointment.findAll({
+      where: { professionalId },
+      attributes: [
+        'facilityId', 
+        [Sequelize.fn('COUNT', Sequelize.col('facilityId')), 'attendedCount']
+      ],
+      group: ['facilityId'],
+      order: [[Sequelize.fn('COUNT', Sequelize.col('facilityId')), 'DESC']], // Ordenar por el conteo
+      include: [{
+        model: Facility,  // Suponiendo que tenemos un modelo de "Facility"
+        attributes: ['name']  // Asegurándonos de incluir el nombre de la facility
+      }],
+      limit: 5 // Limitar a las 5 más atendidas (esto es opcional)
+    });
+
+    return res.json(facilities);
+  } catch (error) {
+    console.error("Error al obtener las facilities más atendidas:", error);
+    res.status(500).json({ message: "Error en el servidor." });
+  }
+};
 
 
