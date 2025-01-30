@@ -133,71 +133,81 @@ export const getMostSoldProducts = async (req: Request, res: Response) => {
 
 export const getRegisteredClientsAndPets = async (req: Request, res: Response) => {
   try {
-      const totalClients = await Client.count();
+    // Contar clientes y mascotas totales
+    const totalClients = await Client.count();
+    const totalPets = await Pet.count();
 
-      const totalPets = await Pet.count();
+    // Obtener clientes por mes con COUNT
+    const clientsByMonth = await Client.findAll({
+      attributes: [
+        [Sequelize.fn('DATE_FORMAT', Sequelize.col('createdAt'), '%Y-%m-01'), 'month'],
+        [Sequelize.fn('COUNT', Sequelize.col('id')), 'count'],  // Agregar el conteo de clientes
+      ],
+      group: ['month'],
+      order: [['month', 'ASC']],
+    });
 
-      const clientsByMonth = await Client.findAll({
-          attributes: [
-              [Sequelize.fn('DATE_FORMAT', Sequelize.col('createdAt'), '%Y-%m-01'), 'month'],  
-          ],
-          group: ['month'],
-          order: [['month', 'ASC']],
-      });
+    // Obtener mascotas por mes con COUNT
+    const petsByMonth = await Pet.findAll({
+      attributes: [
+        [Sequelize.fn('DATE_FORMAT', Sequelize.col('createdAt'), '%Y-%m-01'), 'month'],
+        [Sequelize.fn('COUNT', Sequelize.col('id')), 'count']
+      ],
+      group: ['month'],
+      order: [['month', 'ASC']],
+    });
 
-      const petsByMonth = await Pet.findAll({
-          attributes: [
-              [Sequelize.fn('DATE_FORMAT', Sequelize.col('createdAt'), '%Y-%m-01'), 'month'],  
-              [Sequelize.fn('COUNT', Sequelize.col('id')), 'count']
-          ],
-          group: ['month'],
-          order: [['month', 'ASC']],
-      });
+    // Formatear los datos de clientes
+    const clientsFormatted = clientsByMonth.map((client: any) => ({
+      month: client.dataValues.month,
+      totalClients: parseInt(client.dataValues.count, 10),  // Asegurarse de convertirlo a número
+    }));
 
-      const clientsFormatted = clientsByMonth.map((client: any) => ({
-          month: client.dataValues.month,
-          totalClients: parseInt(client.dataValues.count, 10), 
-      }));
+    // Formatear los datos de mascotas
+    const petsFormatted = petsByMonth.map((pet: any) => ({
+      month: pet.dataValues.month,
+      totalPets: parseInt(pet.dataValues.count, 10),
+    }));
 
-      const petsFormatted = petsByMonth.map((pet: any) => ({
-          month: pet.dataValues.month,
-          totalPets: parseInt(pet.dataValues.count, 10), 
-      }));
-
-      const combinedData = clientsFormatted.map((client) => {
-          const petData = petsFormatted.find((pet) => pet.month === client.month);
-          return {
-              month: client.month,
-              totalClients: client.totalClients,
-              totalPets: petData ? petData.totalPets : 0, 
-          };
-      });
-
-      petsFormatted.forEach((pet) => {
-          if (!combinedData.some((data) => data.month === pet.month)) {
-              combinedData.push({
-                  month: pet.month,
-                  totalClients: 0, 
-                  totalPets: pet.totalPets,
-              });
-          }
-      });
-
-      combinedData.sort((a, b) => new Date(a.month).getTime() - new Date(b.month).getTime());
-
-      const report = {
-          totalClients,
-          totalPets,
-          monthlyData: combinedData,
+    // Combinar los datos de clientes y mascotas
+    const combinedData = clientsFormatted.map((client) => {
+      const petData = petsFormatted.find((pet) => pet.month === client.month);
+      return {
+        month: client.month,
+        totalClients: client.totalClients,
+        totalPets: petData ? petData.totalPets : 0,
       };
+    });
 
-      return res.status(200).json(report);
+    // Añadir meses de mascotas que no tengan clientes
+    petsFormatted.forEach((pet) => {
+      if (!combinedData.some((data) => data.month === pet.month)) {
+        combinedData.push({
+          month: pet.month,
+          totalClients: 0,
+          totalPets: pet.totalPets,
+        });
+      }
+    });
+
+    // Ordenar los datos por mes
+    combinedData.sort((a, b) => new Date(a.month).getTime() - new Date(b.month).getTime());
+
+    // Preparar la respuesta
+    const report = {
+      totalClients,
+      totalPets,
+      monthlyData: combinedData,
+    };
+
+    return res.status(200).json(report);
 
   } catch (error) {
-      console.error('Error al generar el reporte:', error);
-      return res.status(500).json({ message: 'Error al generar el reporte' });
+    console.error('Error al generar el reporte:', error);
+    return res.status(500).json({ message: 'Error al generar el reporte' });
   }
 };
+
 
 export const getMostActiveProfessionals = async (req: Request, res: Response) => {
   try {
@@ -318,3 +328,126 @@ export const getMostAttendedFacilities = async (req: Request, res: Response) => 
 };
 
 
+export const getMonthlySpending = async (req: Request, res: Response) => {
+  try {
+    const { clientId } = req.params;
+    
+    if (!clientId) {
+      return res.status(400).json({ message: "Falta el ID del cliente." });
+    }
+
+    const spendingData = await Order.findAll({
+      attributes: [
+        [Sequelize.fn("DATE_FORMAT", Sequelize.col("date"), "%Y-%m"), "month"],
+        [Sequelize.fn("SUM", Sequelize.col("total")), "totalSpent"]  // <-- FIX AQUÍ
+      ],
+      where: { clientId },
+      group: ["month"],
+      order: [["month", "ASC"]]
+    });
+
+    return res.json(spendingData);
+  } catch (error) {
+    console.error("Error al obtener el gasto mensual del cliente:", error);
+    res.status(500).json({ message: "Error en el servidor." });
+  }
+};
+
+
+export const getMostUsedFacilitiesByClient = async (req: Request, res: Response) => {
+  try {
+    const { clientId } = req.params;
+
+    if (!clientId) {
+      return res.status(400).json({ message: "Falta el ID del cliente." });
+    }
+
+    const facilitiesData: any[] = await Appointment.findAll({
+      attributes: [
+        'facilityId',
+        [Sequelize.fn('COUNT', Sequelize.col('facilityId')), 'usageCount'],
+      ],
+      include: [
+        {
+          model: Pet,
+          attributes: [],
+          where: { clientId }, // Filtrar por el cliente
+        },
+      ],
+      group: ['facilityId'],
+      order: [[Sequelize.fn('COUNT', Sequelize.col('facilityId')), 'DESC']],
+    });
+
+    // Obtener los detalles de las instalaciones
+    const facilityIds = facilitiesData.map(f => f.facilityId);
+    const facilityDetails = await Facility.findAll({
+      where: {
+        id: facilityIds,
+      },
+    });
+
+    // Combinar los resultados
+    const result = facilitiesData.map((f: any) => {
+      const facility = facilityDetails.find(fd => fd.id === f.facilityId);
+      return {
+        facilityId: f.facilityId,
+        usageCount: f.getDataValue('usageCount'), // Usar getDataValue para acceder a usageCount
+        facilityName: facility ? facility.name : null,
+      };
+    });
+
+    return res.json(result);
+  } catch (error) {
+    console.error("Error al obtener las instalaciones más utilizadas:", error);
+    res.status(500).json({ message: "Error en el servidor." });
+  }
+};
+
+export const getMostAttendedPets = async (req: Request, res: Response) => {
+  try {
+    const { clientId } = req.params;
+
+    if (!clientId) {
+      return res.status(400).json({ message: "Falta el ID del cliente." });
+    }
+
+    // Obtener las mascotas con más atenciones
+    const petData: any[] = await Appointment.findAll({
+      attributes: [
+        'petId',  // Identificador de la mascota
+        [Sequelize.fn('COUNT', Sequelize.col('petId')), 'attentionCount'],  // Contar las atenciones por mascota
+      ],
+      include: [
+        {
+          model: Pet,
+          attributes: [],  // No necesitamos atributos extra de Pet, solo su ID
+          where: { clientId },  // Filtrar las mascotas por el ID del cliente
+        },
+      ],
+      group: ['petId'],  // Agrupar por petId para contar las atenciones
+      order: [[Sequelize.fn('COUNT', Sequelize.col('petId')), 'DESC']],  // Ordenar por la cantidad de atenciones
+    });
+
+    // Obtener los detalles de las mascotas
+    const petIds = petData.map(f => f.petId);
+    const petDetails = await Pet.findAll({
+      where: {
+        id: petIds,  // Filtrar por los IDs de las mascotas
+      },
+    });
+
+    // Combinar los resultados
+    const result = petData.map((f: any) => {
+      const pet = petDetails.find(pd => pd.id === f.petId);
+      return {
+        petName: pet ? pet.name : null,
+        attentionCount: f.getDataValue('attentionCount'),  // Acceder al valor de atenciones
+      };
+    });
+
+    return res.json(result);
+  } catch (error) {
+    console.error("Error al obtener las mascotas con más atenciones:", error);
+    res.status(500).json({ message: "Error en el servidor." });
+  }
+};
