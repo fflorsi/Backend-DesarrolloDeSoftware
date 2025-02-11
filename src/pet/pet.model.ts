@@ -66,6 +66,7 @@ Pet.init(
     },
     {
       timestamps: true, // Habilita createdAt y updatedAt
+      modelName: 'Pet', // Nombre del modelo
       tableName: 'pets', // Especifica el nombre de la tabla
       sequelize, // Asegúrate de pasar la instancia de Sequelize
     }

@@ -55,6 +55,7 @@ Observation.init(
     },
     {
       timestamps: true, // Habilita createdAt y updatedAt
+      modelName: 'Observation', // Nombre del modelo
       tableName: 'observations', // Especifica el nombre de la tabla
       sequelize, // Asegúrate de pasar la instancia de Sequelize
     }

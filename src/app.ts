@@ -29,6 +29,8 @@ import { User } from "./user/user.model.js";
 import { paymentRouter } from "./payment/payment.routes.js";
 import { report } from "process";
 import { reportRouter } from "./report/report.routes.js";
+import { Client } from "./client/client.model.js";
+import { Product } from "./product/product.model.js";
 
 const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
@@ -47,11 +49,13 @@ app.use(cors({
 
 //profesionales
 app.use('/api/professionals', professionalRouter)
+//clientes
+app.use('/api/clients', clientRouter )
 //mascotas
 app.use('/api/pets', petRouter ) 
 
-//clientes
-app.use('/api/clients', clientRouter )
+
+
 
 //mediccalhistory
 app.use('/api/medicalhistory', medicalHistoryRouter )
@@ -87,18 +91,7 @@ app.use((req, res) => {
 // Sincronización de modelos con la base de datos
 (async () => {
   try {
-    await Professional.sync()
-    await Observation.sync()
-    await Type.sync()
-    await Pet.sync()
-    await Vaccine.sync()
-    await MedicalHistory.sync()
-    await Facility.sync()
-    await MedicalHistoryVaccine.sync()
-    await Appointment.sync()
-    await Order.sync()
-    await OrderItem.sync()
-    await User.sync()
+
     await sequelize.sync(); 
     console.log("Tablas sincronizadas correctamente");
 

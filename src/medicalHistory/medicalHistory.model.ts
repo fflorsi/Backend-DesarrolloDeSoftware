@@ -37,6 +37,7 @@ MedicalHistory.init(
     },
     {
         timestamps: true,
+        modelName: 'MedicalHistory',
         tableName: 'medicalHistories',
         sequelize,
     }

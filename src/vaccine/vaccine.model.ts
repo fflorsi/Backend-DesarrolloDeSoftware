@@ -29,6 +29,7 @@ Vaccine.init(
     },
     {
         timestamps: true,
+        modelName: 'Vaccine',
         tableName: 'vaccines',
         sequelize,
     }

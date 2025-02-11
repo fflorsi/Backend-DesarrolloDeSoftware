@@ -16,7 +16,7 @@ interface ProductCreationAttributes extends Optional<ProductAttributes, 'id'> {}
 
 // Modelo de producto
 export class Product extends Model<ProductAttributes, ProductCreationAttributes> implements ProductAttributes {
-    public id!: number; // Id es obligatorio después de ser creado
+    public id!: number; 
     public name!: string;
     public description!: string;
     public price!: number;
