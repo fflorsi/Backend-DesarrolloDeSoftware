@@ -34,6 +34,7 @@ export const createOrder = async(req: Request, res: Response) => {
           pending: "http://localhost:3000/api/payment/pending",
         },
         auto_return: "approved",
+        notification_url: "https://47a8-181-97-147-163.ngrok-free.app/api/payment/webhook"
       },
       requestOptions: {
         timeout: 5000
@@ -86,4 +87,27 @@ export const pending = async (req:Request, res:Response) => {
   catch(error){
     console.log("Error en el pago", error)
   }  
+}
+
+export const webhook = async (req:Request, res:Response) => {
+  const paymentId = req.query.id
+  try{
+    const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${client.accessToken}`
+      }
+    }
+    )
+
+    if(response.ok){
+      const data = await response.json()
+      console.log(data)
+      
+    }
+    res.sendStatus(200)
+  } catch (error) {
+    console.error('Error: ', error)
+    res.sendStatus(500)
+  }
 }
