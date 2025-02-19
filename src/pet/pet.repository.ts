@@ -69,8 +69,13 @@ export class PetRepository implements Repository<Pet>{
     public async findByClientId(item: { clientId: string }): Promise<Pet[] | undefined> {
         const id = Number.parseInt(item.clientId)
         if (isNaN(id)) return undefined
-        const pets:Pet[] = await PetModel.findAll({ where: { clientId: id } })
-
+        const pets = await PetModel.findAll({
+            where: { clientId: id }, // Filtras por clientId
+            include: [{
+                model: TypeModel,     // Incluyes el modelo relacionado
+                attributes: ['name'], // Solo seleccionas el atributo 'name' del modelo TypeModel
+            }],
+        });
         return pets ? (pets) : undefined
     }
 }
