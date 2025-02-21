@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { sanitizeProductInput, findAll, findOne, add, update, remove,  } from './product.controler';
+import { sanitizeProductInput, findAll, findOne, add, update, remove,  } from './product.controler.js';
 
 export const productRouter = Router()
 

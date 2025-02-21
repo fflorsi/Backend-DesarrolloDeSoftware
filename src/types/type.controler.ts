@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { typesRepository } from "./type.repository";
+import { typesRepository } from "./type.repository.js";
 
 const repository = new typesRepository()
 

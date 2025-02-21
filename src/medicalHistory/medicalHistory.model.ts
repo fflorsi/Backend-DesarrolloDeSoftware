@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../db/connection';
-import { Vaccine } from '../vaccine/vaccine.model';
-import { MedicalHistoryVaccine } from './medicalHistory_vaccines.model';
+import sequelize from '../db/connection.js';
+import { Vaccine } from '../vaccine/vaccine.model.js';
+import { MedicalHistoryVaccine } from './medicalHistory_vaccines.model.js';
 
 interface MedicalHistoryAttributes {
     id?: number;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, sanitizeProfessionalInput, findOne, add, update, remove } from "./professional.controler";
+import { findAll, sanitizeProfessionalInput, findOne, add, update, remove } from "./professional.controler.js";
 
 export const professionalRouter = Router()
 

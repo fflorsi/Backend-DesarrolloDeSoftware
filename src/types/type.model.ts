@@ -1,5 +1,5 @@
 import { DataTypes, Optional, Model } from 'sequelize';
-import sequelize from '../db/connection';
+import sequelize from '../db/connection.js';
 
 // Define los atributos del producto
 interface TypeAttributes {

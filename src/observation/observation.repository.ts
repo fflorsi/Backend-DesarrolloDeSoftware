@@ -1,6 +1,8 @@
-import { observation } from "./observations.entity";
-import { Observation as ObservationModel } from "./observation.model";
-import { Professional as ProfessionalModel } from "../professional/professional.model";
+import { Repository } from "../shared/repository.js";
+import { observation } from "./observations.entity.js";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { Observation as ObservationModel } from "./observation.model.js";
+import { Professional as ProfessionalModel } from "../professional/professional.model.js";
 
 
 export class observationRepository{

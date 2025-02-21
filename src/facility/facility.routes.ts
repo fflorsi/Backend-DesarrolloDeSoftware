@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sanitizeFacilityInput, findAll, findOne, add, update, remove, searchByName} from './facility.controler'
+import { sanitizeFacilityInput, findAll, findOne, add, update, remove, searchByName} from './facility.controler.js'
 
 export const facilityRouter = Router()
 

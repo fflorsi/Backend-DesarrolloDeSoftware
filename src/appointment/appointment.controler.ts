@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { Appointment } from '../appointment/appointment.model'
+import { Appointment } from '../appointment/appointment.model.js'
 import { Op } from 'sequelize'; // Importa operadores de Sequelize
-import { Pet } from '../pet/pet.model';
-import { Professional } from '../professional/professional.model';
-import { Facility } from '../facility/facility.model';
+import { Pet } from '../pet/pet.model.js';
+import { Professional } from '../professional/professional.model.js';
+import { Facility } from '../facility/facility.model.js';
 
 // Función para crear un nuevo turno
 export const createAppointment = async (req: Request, res: Response): Promise<Response> => {

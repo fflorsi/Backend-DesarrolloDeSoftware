@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import { ProductRepository } from './product.repository'
-import { Product} from './product.entity'
+import { ProductRepository } from './product.repository.js'
+import { Product} from './product.entity.js'
 
 
 const repository = new ProductRepository()

@@ -1,6 +1,6 @@
-import { Repository } from "../shared/repository";
-import { Vaccine } from "./vaccine.entity";
-import { Vaccine as VaccineModel } from "./vaccine.model";
+import { Repository } from "../shared/repository.js";
+import { Vaccine } from "./vaccine.entity.js";
+import { Vaccine as VaccineModel } from "./vaccine.model.js";
 
 export class VaccineRepository implements Repository<Vaccine>{
   

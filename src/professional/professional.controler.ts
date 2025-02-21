@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { ProfessionalRepository } from "./professional.repository";
+import { ProfessionalRepository } from "./professional.repository.js";
+import { Professional } from "./professionals.entity.js";
 
 const repository = new ProfessionalRepository();
 

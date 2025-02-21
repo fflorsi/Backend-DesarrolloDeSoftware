@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../db/connection';
+import sequelize from '../db/connection.js';
 
 // Define los atributos del cliente
 interface ClientAttributes {

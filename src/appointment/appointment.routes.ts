@@ -9,7 +9,7 @@ import {
   getFutureAppointmentsWithDetails,
   getFutureAppointmentsWithDetailsByClientId,
   getFutureAppointmentsByProfessionalId,
-} from '../appointment/appointment.controler'; // Importa las funciones del controlador
+} from '../appointment/appointment.controler.js'; // Importa las funciones del controlador
 
 export const appointmentRouter = Router();
 

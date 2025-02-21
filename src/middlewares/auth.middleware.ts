@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import {User} from '../user/user.model'; // Asegúrate de que este sea tu modelo correcto
+import {User} from '../user/user.model.js'; // Asegúrate de que este sea tu modelo correcto
 
 export const verifyRole = (requiredRoles: string[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {

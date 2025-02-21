@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createOrder, success, failure, pending, webhook } from "./payment.controler";
+import { createOrder, success, failure, pending, webhook } from "./payment.controler.js";
 
 export const paymentRouter = Router()
 

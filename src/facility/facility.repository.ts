@@ -1,5 +1,5 @@
-import { Facility as FacilityModel } from "./facility.model";
-import { Facility, Facility as FacilityInterface } from "./facility.entity";
+import { Facility as FacilityModel } from "./facility.model.js";
+import { Facility, Facility as FacilityInterface } from "./facility.entity.js";
 import { Op } from "sequelize";
 
 export class FacilityRepository {

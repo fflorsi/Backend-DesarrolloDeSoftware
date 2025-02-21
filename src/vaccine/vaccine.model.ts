@@ -1,7 +1,7 @@
 // vaccine.model.ts
 import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../db/connection';
-import { MedicalHistoryVaccine } from '../medicalHistory/medicalHistory_vaccines.model';
+import sequelize from '../db/connection.js';
+import { MedicalHistoryVaccine } from '../medicalHistory/medicalHistory_vaccines.model.js';
 
 interface VaccineAttributes {
     id?: number;
@@ -37,7 +37,7 @@ Vaccine.init(
 
 // Importar MedicalHistory de forma dinámica
 let MedicalHistory;
-import('../medicalHistory/medicalHistory.model').then(module => {
+import('../medicalHistory/medicalHistory.model.js').then(module => {
     MedicalHistory = module.MedicalHistory;
     Vaccine.belongsToMany(MedicalHistory, {
         through: MedicalHistoryVaccine,

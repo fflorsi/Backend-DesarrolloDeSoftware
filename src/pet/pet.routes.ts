@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sanitizePetInput, findAll, findOne, add, update, remove, findByClientId, findByClientDni } from "./pet.controler";
+import { sanitizePetInput, findAll, findOne, add, update, remove, findByClientId, findByClientDni } from "./pet.controler.js";
 
 export const petRouter = Router();
 

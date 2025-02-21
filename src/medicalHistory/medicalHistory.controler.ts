@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction} from "express"
-import { MedicalHistoryRepository } from "./medicalHistory.repository"
-import { MedicalHistory } from "./medicalHistory.entity"
+import { MedicalHistoryRepository } from "./medicalHistory.repository.js"
+import { MedicalHistory } from "./medicalHistory.entity.js"
 const repository = new MedicalHistoryRepository()
 
 
