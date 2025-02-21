@@ -1,10 +1,10 @@
 import {Request, Response} from 'express';
 import bcrypt from 'bcrypt';
-import {User} from './user.model.js';
-import { Client } from '../client/client.model.js';
-import { Professional } from '../professional/professional.model.js';
+import {User} from './user.model';
+import { Client } from '../client/client.model';
+import { Professional } from '../professional/professional.model';
 import jwt from 'jsonwebtoken';
-import sequelize from '../db/connection.js';
+import sequelize from '../db/connection';
 
 export const newUser = async (req: Request, res: Response) => {
     const { user, client } = req.body;

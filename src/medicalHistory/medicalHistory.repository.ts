@@ -1,9 +1,7 @@
-import { Repository } from "../shared/repository.js";
-import { MedicalHistory } from "./medicalHistory.entity.js";
-import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { observation } from "../observation/observations.entity.js";
-import { MedicalHistory as MedicalHistoryModel } from "./medicalHistory.model.js";
-import { Vaccine as VaccineModel } from "../vaccine/vaccine.model.js";
+import { Repository } from "../shared/repository";
+import { MedicalHistory } from "./medicalHistory.entity";
+import { MedicalHistory as MedicalHistoryModel } from "./medicalHistory.model";
+import { Vaccine as VaccineModel } from "../vaccine/vaccine.model";
 
 
 export class MedicalHistoryRepository implements Repository<MedicalHistory>{

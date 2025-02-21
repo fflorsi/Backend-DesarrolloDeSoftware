@@ -1,8 +1,7 @@
-import { Repository } from "../shared/repository.js";
-import { Pet } from "./pet.entity.js";
-import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { Pet as PetModel } from "./pet.model.js";
-import { Type as TypeModel } from "../types/type.model.js";
+import { Repository } from "../shared/repository";
+import { Pet } from "./pet.entity";
+import { Pet as PetModel } from "./pet.model";
+import { Type as TypeModel } from "../types/type.model";
 
 
 

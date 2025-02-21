@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, sanitizeObservationInput, findOne, add, update, remove, findByMedicalHistory } from "./observations.controler.js";
+import { findAll, sanitizeObservationInput, findOne, add, update, remove, findByMedicalHistory } from "./observations.controler";
 
 export const observationRouter = Router()
 

@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { PetRepository } from './pet.repository.js';
-import { Pet } from './pet.entity.js';
-import { ClientRepository } from '../client/client.repository.js';
-import { findOne as findClientOne } from '../client/client.controler.js'
+import { PetRepository } from './pet.repository';
+import { Pet } from './pet.entity';
+import { ClientRepository } from '../client/client.repository';
 
 const repository = new PetRepository(); 
 

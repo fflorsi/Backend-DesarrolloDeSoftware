@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { Order } from '../order/order.model.js';
-import { Appointment } from '../appointment/appointment.model.js';
-import { Facility } from '../facility/facility.model.js';
-import { OrderItem } from '../order/orderDetail.model.js';
-import { Product } from '../product/product.model.js';
-import { Professional } from '../professional/professional.model.js';
-import { Client } from '../client/client.model.js';
-import { Pet } from '../pet/pet.model.js';
+import { Order } from '../order/order.model';
+import { Appointment } from '../appointment/appointment.model';
+import { Facility } from '../facility/facility.model';
+import { OrderItem } from '../order/orderDetail.model';
+import { Product } from '../product/product.model';
+import { Professional } from '../professional/professional.model';
+import { Client } from '../client/client.model';
+import { Pet } from '../pet/pet.model';
 import { Sequelize } from 'sequelize';
 import { Op, fn, col } from 'sequelize';
 

@@ -1,7 +1,7 @@
 
 import { Request, Response, NextFunction } from "express"
-import { observationRepository } from "./observation.repository.js"
-import { observation } from "./observations.entity.js"
+import { observationRepository } from "./observation.repository"
+import { observation } from "./observations.entity"
 
 const repository = new observationRepository()
 

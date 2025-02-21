@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { add, findAll, findOne, remove, sanitizeVaccineInput, update } from './vaccine.controler.js';
+import { add, findAll, findOne, remove, sanitizeVaccineInput, update } from './vaccine.controler';
 import { format } from "path";
 
 export const vaccineRouter = Router()

@@ -1,8 +1,8 @@
-import { Professional as ProfessionalInterface } from "./professionals.entity.js";
-import { Professional as ProfessionalModel } from "../professional/professional.model.js";
-import { User } from "../user/user.model.js";
+import { Professional as ProfessionalInterface } from "./professionals.entity";
+import { Professional as ProfessionalModel } from "../professional/professional.model";
+import { User } from "../user/user.model";
 import bcrypt from "bcrypt";
-import { generatePassword } from "../utils/passwordGenerator.js";
+import { generatePassword } from "../utils/passwordGenerator";
 
 export class ProfessionalRepository {
     /**

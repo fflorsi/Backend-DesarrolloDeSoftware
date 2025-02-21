@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { Order } from './order.model.js';
-import { OrderItem } from './orderDetail.model.js';
-import { Product } from '../product/product.model.js';
-import { Sequelize } from 'sequelize';
+import { Order } from './order.model';
+import { OrderItem } from './orderDetail.model';
+import { Product } from '../product/product.model';
 import { Op } from 'sequelize';
 
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, findOne } from "./type.controler.js";
+import { findAll, findOne } from "./type.controler";
 
 export const typeRouter = Router()
 

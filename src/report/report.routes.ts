@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAppointmentsByProfessional, getMonthlyEarnings, getMonthlySpending, getMostActiveProfessionals, getMostAttendedFacilities, getMostAttendedPets, getMostRequestedServices, getMostSoldProducts, getMostUsedFacilitiesByClient, getRegisteredClientsAndPets} from './report.controler.js';
+import { getAppointmentsByProfessional, getMonthlyEarnings, getMonthlySpending, getMostActiveProfessionals, getMostAttendedFacilities, getMostAttendedPets, getMostRequestedServices, getMostSoldProducts, getMostUsedFacilitiesByClient, getRegisteredClientsAndPets} from './report.controler';
 
 export const reportRouter = Router();
 

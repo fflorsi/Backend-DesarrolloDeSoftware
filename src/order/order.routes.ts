@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createOrder,getAllOrders, getAllOrdersByClientId, getMonthlyEarnings, getMonthlyEarningsByClientId, getOrderById } from "./oder.controler.js";
+import { createOrder,getAllOrders, getAllOrdersByClientId, getMonthlyEarnings, getMonthlyEarningsByClientId, getOrderById } from "./oder.controler";
 
 export const orderRouter = Router()
 orderRouter.get('/monthly-earnings',getMonthlyEarnings)

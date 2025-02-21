@@ -1,6 +1,6 @@
 import { Router} from "express";
-import {createAdminUser, createProfessionalUser, fetchUserProfile, getUserByUsername, loginUser, newUser, updatePassword, updateUsername} from './user.controler.js';
-import { verifyRole } from "../middlewares/auth.middleware.js";
+import {createAdminUser, createProfessionalUser, fetchUserProfile, getUserByUsername, loginUser, newUser, updatePassword, updateUsername} from './user.controler';
+import { verifyRole } from "../middlewares/auth.middleware";
 
 export const userRouter = Router()
 

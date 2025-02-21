@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
-import { VaccineRepository } from "./vaccine.repository.js";
-import { Vaccine } from "./vaccine.entity.js";
+import { VaccineRepository } from "./vaccine.repository";
+import { Vaccine } from "./vaccine.entity";
 
 const repository = new VaccineRepository()
 

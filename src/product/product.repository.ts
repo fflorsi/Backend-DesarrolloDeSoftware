@@ -1,5 +1,5 @@
-import { Product as ProductModel } from './product.model.js'; // Importar modelo Sequelize
-import { Product as ProductInterface } from './product.entity.js'; // Importar la interfaz
+import { Product as ProductModel } from './product.model'; // Importar modelo Sequelize
+import { Product as ProductInterface } from './product.entity'; // Importar la interfaz
 
 export class ProductRepository {
   

@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
-import { FacilityRepository } from './facility.repository.js';
-import { Facility } from './facility.entity.js';
+import { FacilityRepository } from './facility.repository';
+import { Facility } from './facility.entity';
 
 const repository = new FacilityRepository();
 

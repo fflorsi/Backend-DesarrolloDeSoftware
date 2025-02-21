@@ -1,5 +1,5 @@
-import { Client as ClientModel } from './client.model.js'; 
-import { Client, Client as ClientInterface } from './client.entity.js'; 
+import { Client as ClientModel } from './client.model'; 
+import { Client, Client as ClientInterface } from './client.entity'; 
 import { Op, Sequelize } from 'sequelize';
 
 export class ClientRepository {

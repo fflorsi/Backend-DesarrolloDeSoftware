@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import sequelize from '../db/connection.js';
+import sequelize from '../db/connection';
 
 interface OrderAttributes {
   id: number;

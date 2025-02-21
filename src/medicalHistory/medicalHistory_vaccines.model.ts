@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../db/connection.js';
+import sequelize from '../db/connection';
 
 export class MedicalHistoryVaccine extends Model {
     public medicalHistoryId!: number;

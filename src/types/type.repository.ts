@@ -1,5 +1,5 @@
-import { type } from "./type.entity.js";
-import { Type as TypeModel} from "./type.model.js";
+import { type } from "./type.entity";
+import { Type as TypeModel} from "./type.model";
 
 export class typesRepository{
   public async findAll(): Promise<type[]>{

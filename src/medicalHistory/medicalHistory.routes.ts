@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove, findByPetId, addVaccineToMedicalHistory, removeVaccineFromMedicalHistory } from "./medicalHistory.controler.js";
+import { sanitizeMedicalHistoryInput, findAll, findOne, add, update, remove, findByPetId, addVaccineToMedicalHistory, removeVaccineFromMedicalHistory } from "./medicalHistory.controler";
 
 export const medicalHistoryRouter = Router()
 
