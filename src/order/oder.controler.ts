@@ -8,7 +8,7 @@ import { Op } from 'sequelize';
 
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { items, total, clientId } = req.body;
+    const { items, total, paymentId, clientId } = req.body;
 
     // Verificar si se proporcionó clientId
     if (!clientId) {
@@ -17,7 +17,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
     }
 
     // Crear el pedido principal
-    const order = await Order.create({ total, clientId });
+    const order = await Order.create({ total, paymentId, clientId });
 
     // Crear cada elemento del pedido (OrderItem) en la base de datos
     const orderItems = items.map((item: any) => ({

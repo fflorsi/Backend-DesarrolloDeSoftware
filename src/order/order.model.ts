@@ -2,26 +2,27 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../db/connection.js';
 
 interface OrderAttributes {
-  id: number;
+  id: string;
   total: number;
   date: Date;
+  paymentId: string;
   clientId: number;
 }
 
 interface OrderCreationAttributes extends Optional<OrderAttributes, 'id' | 'date'> {}
 
 export class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
-  public id!: number;
+  public id!: string;
   public total!: number;
   public date!: Date;
+  public paymentId!: string;
   public clientId!: number;
 }
 
 Order.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.STRING,
       primaryKey: true,
     },
     total: {
@@ -32,13 +33,13 @@ Order.init(
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
+    paymentId:{
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     clientId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: 'clients', 
-        key: 'id', 
-      },
       onUpdate: 'CASCADE', 
       onDelete: 'CASCADE', 
     },

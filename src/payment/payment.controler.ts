@@ -3,6 +3,7 @@ import { Request, Response } from "express"
 import { PayerRequest } from "mercadopago/dist/clients/payment/create/types"
 import { PreferenceResponse } from "mercadopago/dist/clients/preference/commonTypes"
 import dotenv from "dotenv"
+import { Order } from "../order/order.model.js"
 
 const client = new MercadoPagoConfig({
   accessToken: "TEST-5380556276184348-012401-fb794cac45ed2b2803d55d2f62a4ab3f-197307509"
@@ -29,18 +30,17 @@ export const createOrder = async(req: Request, res: Response) => {
           pending: "https://www.example.com/pending",
         },
         back_urls: {
-          success: "http://localhost:3000/api/payment/success",
-          failure: "http://localhost:3000/api/payment/failure",
-          pending: "http://localhost:3000/api/payment/pending",
+          success: "http://localhost:4200/success",
+          failure: "http://localhost:4200/failure",
+          pending: "http://localhost:4200/pending",
         },
         auto_return: "approved",
-        notification_url: "https://47a8-181-97-147-163.ngrok-free.app/api/payment/webhook"
+        notification_url: "https://4ecc-181-97-147-163.ngrok-free.app/api/payment/webhook"
       },
       requestOptions: {
         timeout: 5000
       }
     }).then(x => {
-      console.log(x);
       result = x;
     }).catch(err => {
       console.log(err);
@@ -54,60 +54,57 @@ export const createOrder = async(req: Request, res: Response) => {
   }
 }
 
-export const success = async (req:Request, res:Response) => {
-  try{
-    const data = req.query as unknown as PaymentResponse
-    console.log("Data: ", data)
-    //Procesar el estado del pago en la BD
-    res.status(200).json({
-      message: "Pago realizado de forma exitosa",
-      data
-    })
-  }
-  catch(error){
-    console.log("Error en el pago", error)
-  }
-}
+export const savePayment = async (req: Request, res: Response) => {
+    // in: paymentId
+    console.log('Hola')
+    const paymentId = req.params.paymentId;
 
-export const failure = async (req:Request, res:Response) => {
-  try{
-    const data = req.query as unknown as PaymentResponse
-    console.log("Data: ", data)
-  }
-  catch(error){
-    console.log("Error en el pago", error)
-  }  
-}
+    try {
+        // Traigo info del pago
+        const paymentResponse = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer TEST-5380556276184348-012401-fb794cac45ed2b2803d55d2f62a4ab3f-197307509'
+            }
+        });
 
-export const pending = async (req:Request, res:Response) => {
-  try{
-    const data = req.query as unknown as PaymentResponse
-    console.log("Data: ", data)
-  }
-  catch(error){
-    console.log("Error en el pago", error)
-  }  
-}
+        if (!paymentResponse.ok) {
+            throw new Error('Error en la petición de pago: ' + paymentResponse.statusText);
+        }
 
-export const webhook = async (req:Request, res:Response) => {
-  const paymentId = req.query.id
-  try{
-    const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${client.accessToken}`
-      }
+        const paymentData = await paymentResponse.json();
+        console.log("Data del pago:", paymentData);
+        const orderId = paymentData.order.id;
+
+        // Traigo info de la orden
+        const orderResponse = await fetch(`https://api.mercadopago.com/merchant_orders/${orderId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer TEST-5380556276184348-012401-fb794cac45ed2b2803d55d2f62a4ab3f-197307509'
+            }
+        });
+
+        if (!orderResponse.ok) {
+            throw new Error('Error en la petición de orden: ' + orderResponse.statusText);
+        }
+
+        const orderData = await orderResponse.json();
+        console.log("Data de la orden:", orderData);
+
+        // Vuelco en BD
+         const order = await Order.create({
+          id: orderData.id,
+          total: orderData.total_amount,
+          date: paymentData.date_approved,
+          clientId: paymentData.payer.identification.number,
+          paymentId: paymentData.id
+    });
+
+
+
+        res.status(200).json({ paymentData, orderData });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error });
     }
-    )
-
-    if(response.ok){
-      const data = await response.json()
-      console.log(data)
-      
-    }
-    res.sendStatus(200)
-  } catch (error) {
-    console.error('Error: ', error)
-    res.sendStatus(500)
-  }
-}
+};

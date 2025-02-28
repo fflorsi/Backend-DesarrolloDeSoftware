@@ -1,7 +1,4 @@
-GET http://localhost:3000/api/payment/success
-
-###
-GET http://localhost:3000/api/payment/failure
+GET http://localhost:3000/api/payment/save/1332543035
 
 ###
 POST http://localhost:3000/api/payment/create
