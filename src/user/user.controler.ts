@@ -334,3 +334,36 @@ export const getUserByUsername = async (req: Request, res: Response) => {
             });
         }
     };
+
+    export const fetchUserProfileById = async (req: Request, res: Response) => {
+        try {
+            const userId = req.params.id;
+            const user = await User.findByPk(userId);
+    
+            if (!user) {
+                return res.status(404).json({ msg: 'Usuario no encontrado' });
+            }
+    
+            // Retorna la información del perfil según el rol
+            if (user.role === 'client') {
+                return res.json({
+                    id: user.id,
+                    username: user.username,
+                    role: user.role,
+                    clientId: user.clientId, // En el caso de un cliente, este es relevante
+                });
+            } else if (user.role === 'professional') {
+                return res.json({
+                    id: user.id,
+                    username: user.username,
+                    role: user.role,
+                    professionalId: user.professionalId, // En el caso de un profesional
+                });
+            }
+    
+            return res.status(400).json({ msg: 'Rol de usuario no reconocido' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: 'Error al obtener el perfil del usuario' });
+        }
+    };
