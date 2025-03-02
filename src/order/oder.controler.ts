@@ -6,36 +6,6 @@ import { Sequelize } from 'sequelize';
 import { Op } from 'sequelize';
 
 
-export const createOrder = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { items, total, paymentId, clientId } = req.body;
-
-    // Verificar si se proporcionó clientId
-    if (!clientId) {
-      res.status(400).json({ message: 'Client ID is required' });
-      return;
-    }
-
-    // Crear el pedido principal
-    const order = await Order.create({ total, paymentId, clientId });
-
-    // Crear cada elemento del pedido (OrderItem) en la base de datos
-    const orderItems = items.map((item: any) => ({
-      orderId: order.id,
-      productId: item.id,
-      quantity: item.quantity,
-      price: item.price,
-    }));
-
-    await OrderItem.bulkCreate(orderItems);
-
-    res.status(201).json({ message: 'Order created successfully', order });
-  } catch (error) {
-    console.error('Error creating order:', error);
-    res.status(500).json({ message: 'Error creating order' });
-  }
-};
-
 export const getAllOrders = async (req: Request, res: Response): Promise<void> => {
   try {
     const orders = await Order.findAll({
