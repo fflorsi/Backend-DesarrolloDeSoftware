@@ -21,6 +21,8 @@ export class Pet extends Model<PetAttributes,PetCreationAttributes> implements P
     breed!: string
     weight!: number
     clientId!: number
+    createdAt?: Date
+    updatedAt?: Date
 
 }
 
@@ -45,7 +47,9 @@ Pet.init(
         references:{
             model: 'types',
             key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       breed:{
         type: DataTypes.STRING,
@@ -61,7 +65,9 @@ Pet.init(
         references:{
             model: 'clients',
             key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       }
     },
     {

@@ -1,16 +1,15 @@
 import { DataTypes, Optional, Model } from 'sequelize';
 import sequelize from '../db/connection.js';
 
-// Define los atributos del producto
+
 interface TypeAttributes {
-    id?: number; // Opcional al crear un nuevo producto
+    id?: number; 
     name: string;
 }
 
 
 interface TypeCreationAttributes extends Optional<TypeAttributes, 'id'> {}
 
-// Modelo de producto
 export class Type extends Model<TypeAttributes, TypeCreationAttributes> implements TypeAttributes {
     public id!: number; // Id es obligatorio después de ser creado
     public name!: string;
@@ -23,6 +22,11 @@ export class Type extends Model<TypeAttributes, TypeCreationAttributes> implemen
 
 Type.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      },
     name: {
         type: DataTypes.STRING,
         allowNull: false
