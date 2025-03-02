@@ -17,8 +17,7 @@ const payment = new Payment(client)
 
 export const createOrder = async(req: Request, res: Response) => {
   try {
-    const { payer, itemsToPay } = req.body // Obtener datos del body
-
+    const { payer, itemsToPay } = req.body 
     let result: PreferenceResponse | undefined
     const preference = new Preference(client)
     await preference.create({
@@ -117,4 +116,4 @@ export const savePayment = async (req: Request, res: Response) => {
         console.error('Error:', error)
         res.status(500).json({ error })
     }
-};
+}

@@ -145,6 +145,36 @@ export const getMonthlyEarningsByClientId = async (req: Request, res: Response) 
   }
 };
 
+  export const getOrderByPaymentId = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { paymentId } = req.params;
+      const order = await Order.findOne({
+            where: { paymentId: paymentId },
+            include: [
+                {
+                    model: OrderItem,
+                    as: 'items', 
+                    include: [
+                        {
+                            model: Product,
+                            as: 'product'
+                        }
+                    ]
+                }
+            ]
+        })
+  
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+  
+      return res.json(order);
+    } catch (error) {
+      console.error("Error fetching order by payment ID:", error);
+      return res.status(500).json({ message: 'Error fetching order' });
+    }
+  };
+
 
 
 
