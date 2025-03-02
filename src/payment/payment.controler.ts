@@ -34,8 +34,7 @@ export const createOrder = async(req: Request, res: Response) => {
           failure: "http://localhost:4200/failure",
           pending: "http://localhost:4200/pending",
         },
-        auto_return: "approved",
-        notification_url: "https://4ecc-181-97-147-163.ngrok-free.app/api/payment/webhook"
+        auto_return: "approved"
       },
       requestOptions: {
         timeout: 5000
