@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors";
-import  sequelize  from './db/connection.js';
+import sequelize  from "./db/connection.js";
 import { petRouter } from "./pet/pet.routes.js"
 import { clientRouter } from "./client/client.routes.js"
 import { medicalHistoryRouter } from "./medicalHistory/medicalHistory.routes.js"
@@ -32,7 +32,7 @@ import { reportRouter } from "./report/report.routes.js";
 import { Client } from "./client/client.model.js";
 import { Product } from "./product/product.model.js";
 
-const app = express()
+export const app = express()
 app.use(express.json()) //solo va a mirar donde tengamos el content type 
 
 //user --> request-->express-->middleware que forme req.body--> app.post (req.body)-->response-->user
@@ -89,6 +89,7 @@ app.use((req, res) => {
 });
 
 // Sincronización de modelos con la base de datos
+if (process.env.NODE_ENV !== 'test') {
 (async () => {
   try {
 
@@ -103,3 +104,4 @@ app.use((req, res) => {
     console.error("Error al sincronizar las tablas:", error);
   }
 })();
+}
