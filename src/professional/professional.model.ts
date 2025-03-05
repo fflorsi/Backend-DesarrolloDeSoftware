@@ -65,6 +65,8 @@ Professional.init(
     },
     {
         sequelize,
+        paranoid: true,
+        deletedAt: 'destroyTime',
         modelName: 'Professional',
         tableName: 'professionals',
         timestamps: true, // Habilita createdAt y updatedAt

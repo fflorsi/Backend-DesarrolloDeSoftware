@@ -113,15 +113,18 @@ export const getAllAppointmentsWithDetails = async (req: Request, res: Response)
       include: [
         { 
           model: Pet, 
-          attributes: ['id', 'name']  // Limita los campos seleccionados
+          attributes: ['id', 'name'],
+          paranoid: false   // Limita los campos seleccionados
         },
         { 
           model: Professional, 
-          attributes: ['id', 'firstname', 'lastname']  // Limita los campos seleccionados
+          attributes: ['id', 'firstname', 'lastname'],
+          paranoid: false   // Limita los campos seleccionados
         },
         { 
           model: Facility, 
-          attributes: ['id', 'name']  // Limita los campos seleccionados
+          attributes: ['id', 'name'],
+          paranoid: false   // Limita los campos seleccionados
         }
       ]
     });
@@ -143,15 +146,18 @@ export const getFutureAppointmentsWithDetails = async (req: Request, res: Respon
       include: [
         { 
           model: Pet,
-          attributes: ['id', 'name']
+          attributes: ['id', 'name'],
+          paranoid: false 
         },
         { 
           model: Professional,
-          attributes: ['id', 'firstname', 'lastname']
+          attributes: ['id', 'firstname', 'lastname'],
+          paranoid: false 
         },
         { 
           model: Facility,
-          attributes: ['id', 'name']
+          attributes: ['id', 'name'],
+          paranoid: false 
         }
       ]
     });
@@ -192,15 +198,18 @@ export const getFutureAppointmentsWithDetails = async (req: Request, res: Respon
         include: [
           { 
             model: Pet,
-            attributes: ['id', 'name']
+            attributes: ['id', 'name'],
+            paranoid: false 
           },
           { 
             model: Professional,
-            attributes: ['id', 'firstname', 'lastname']
+            attributes: ['id', 'firstname', 'lastname'],
+            paranoid: false 
           },
           { 
             model: Facility,
-            attributes: ['id', 'name']
+            attributes: ['id', 'name'],
+            paranoid: false 
           }
         ]
       });
@@ -239,14 +248,17 @@ export const getFutureAppointmentsWithDetails = async (req: Request, res: Respon
           {
             model: Pet,
             attributes: ['id', 'name'],
+            paranoid: false 
           },
           {
             model: Professional,
             attributes: ['id', 'firstname', 'lastname'],
+            paranoid: false 
           },
           {
             model: Facility,
             attributes: ['id', 'name'],
+            paranoid: false 
           },
         ],
       });

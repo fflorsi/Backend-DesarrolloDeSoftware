@@ -38,6 +38,8 @@ Facility.init(
     },
     {
         sequelize,
+        paranoid: true,
+        deletedAt: 'destroyTime',
         modelName: 'Facility',
         tableName: 'facilities',
         timestamps: true
