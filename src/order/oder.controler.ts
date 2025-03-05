@@ -10,7 +10,7 @@ export const getAllOrders = async (req: Request, res: Response): Promise<void> =
   try {
     const orders = await Order.findAll({
       include: [
-        { model: OrderItem, as: 'items', include: [{ model: Product, as: 'product' }] },
+        { model: OrderItem, as: 'items', include: [{ model: Product, as: 'product', paranoid: false  }]},
       ],
     });
     res.json(orders);
@@ -27,7 +27,7 @@ export const getAllOrders = async (req: Request, res: Response): Promise<void> =
       const { id } = req.params;
       const order = await Order.findByPk(id, {
         include: [
-          { model: OrderItem, as: 'items', include: [{ model: Product, as: 'product' }] },
+          { model: OrderItem, as: 'items', include: [{ model: Product, as: 'product', paranoid: false  }]},
         ],
       });
   
@@ -88,7 +88,7 @@ export const getAllOrdersByClientId = async (req: Request, res: Response): Promi
         { 
           model: OrderItem, 
           as: 'items', 
-          include: [{ model: Product, as: 'product' }]
+          include: [{ model: Product, as: 'product', paranoid: false  }],
         },
       ],
     });
@@ -157,7 +157,8 @@ export const getMonthlyEarningsByClientId = async (req: Request, res: Response) 
                     include: [
                         {
                             model: Product,
-                            as: 'product'
+                            as: 'product',
+                            paranoid: false 
                         }
                     ]
                 }

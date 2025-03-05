@@ -55,6 +55,8 @@ Product.init(
     },
     {
         sequelize,
+        paranoid: true,
+        deletedAt: 'destroyTime',
         modelName: 'Product',
         tableName: 'products',
         timestamps: true, // Habilita createdAt y updatedAt
