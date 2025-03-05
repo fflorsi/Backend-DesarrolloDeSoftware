@@ -95,7 +95,7 @@ async function update(req:Request, res:Response) {
  async function findByClientId(req: Request, res: Response) {
     const clientId = req.params.clientId;
     const pets = await repository.findByClientId({clientId});
-    if (!pets) {
+    if (!pets || pets.length === 0) {
         return res.status(404).send({ message: 'Pets not found for the given client' });
     }
     res.json({ data: pets });

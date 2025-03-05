@@ -52,4 +52,4 @@ Content-Type: application/json
 DELETE http://localhost:3000/api/clients/2
 
 ### obtener cliente por dni
-GET http://localhost:3000/api/clients/by-dni/
+GET http://localhost:3000/api/clients/by-dni/57789431
