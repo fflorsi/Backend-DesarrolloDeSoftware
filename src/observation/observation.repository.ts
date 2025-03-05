@@ -10,7 +10,8 @@ export class observationRepository{
         const observations = await ObservationModel.findAll({
         include: [{
             model: ProfessionalModel, as: 'professionalData',
-            attributes: ['firstname', 'lastname']
+            attributes: ['firstname', 'lastname'],
+            paranoid: false 
         }]
     })
         return observations.map(observation => observation.toJSON() as observation)
@@ -22,7 +23,8 @@ export class observationRepository{
         const observation = await ObservationModel.findByPk(id,{
         include: [{
             model: ProfessionalModel, as: 'professionalData',
-            attributes: ['firstname', 'lastname']
+            attributes: ['firstname', 'lastname'],
+            paranoid: false 
         }]
     })
 
@@ -72,7 +74,8 @@ export class observationRepository{
         const observations:observation[] = await ObservationModel.findAll({ where: { medicalHistoryId: id },
         include: [{
             model: ProfessionalModel, as: 'professionalData',
-            attributes: ['firstname', 'lastname']
+            attributes: ['firstname', 'lastname'],
+            paranoid: false 
         }]
     } )
 

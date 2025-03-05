@@ -34,6 +34,8 @@ Type.init(
     }, 
     {
       sequelize,
+      paranoid: true,
+      deletedAt: 'destroyTime',
       modelName: 'Type',
       tableName: 'types',
       timestamps: true, // Habilita createdAt y updatedAt

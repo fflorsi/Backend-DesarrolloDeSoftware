@@ -12,7 +12,8 @@ export class PetRepository implements Repository<Pet>{
     const pets = await PetModel.findAll({
         include: [{
             model: TypeModel,
-            attributes: ['name']
+            attributes: ['name'],
+            paranoid: false 
         }]
     })
     return pets.map(pet => pet.toJSON() as Pet)
@@ -25,7 +26,8 @@ export class PetRepository implements Repository<Pet>{
         const pet = await PetModel.findByPk(id,{
         include: [{
             model: TypeModel,
-            attributes: ['name']
+            attributes: ['name'],
+            paranoid: false 
         }]
     })
 
@@ -73,7 +75,8 @@ export class PetRepository implements Repository<Pet>{
             where: { clientId: id }, // Filtras por clientId
             include: [{
                 model: TypeModel,     // Incluyes el modelo relacionado
-                attributes: ['name'], // Solo seleccionas el atributo 'name' del modelo TypeModel
+                attributes: ['name'],
+                paranoid: false  // Solo seleccionas el atributo 'name' del modelo TypeModel
             }],
         });
         return pets ? (pets) : undefined
