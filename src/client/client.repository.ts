@@ -1,6 +1,7 @@
 import { Client as ClientModel } from './client.model.js'; 
 import { Client, Client as ClientInterface } from './client.entity.js'; 
 import { Op, Sequelize } from 'sequelize';
+import { Pet } from '../pet/pet.model.js';
 
 export class ClientRepository {
   
@@ -56,7 +57,8 @@ export class ClientRepository {
   public async delete(item: { id: string }): Promise<ClientInterface | null> {
     const clientToDelete = await this.findOne(item);
     if (!clientToDelete) return null; 
-    await ClientModel.destroy({ where: { id: clientToDelete.id } });
+    await ClientModel.destroy({ where: { id: clientToDelete.id } })
+    await Pet.destroy({where: {clientId: clientToDelete.id}})
     return clientToDelete; // Devuelve el cliente eliminado
   }
 

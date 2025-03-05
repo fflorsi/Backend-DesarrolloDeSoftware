@@ -28,10 +28,12 @@ Vaccine.init(
         }
     },
     {
+        sequelize,
+        paranoid: true,
+        deletedAt: 'destroyTime',
         timestamps: true,
         modelName: 'Vaccine',
         tableName: 'vaccines',
-        sequelize,
     }
 );
 

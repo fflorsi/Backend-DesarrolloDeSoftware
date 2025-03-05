@@ -12,7 +12,8 @@ public async findAll(): Promise<MedicalHistory[] | undefined> {
         const medicalHistories = await MedicalHistoryModel.findAll({
           include: [{
             model: VaccineModel,
-            through: { attributes: [] } 
+            through: { attributes: [] },
+            paranoid: false 
         }]
     });
     return medicalHistories.map(medicalHistory => medicalHistory.toJSON() as MedicalHistory)
@@ -25,7 +26,8 @@ public async findByPetId(petId: { id: string }): Promise<MedicalHistory | undefi
         where: { petId: id },
         include: [{
             model: VaccineModel,
-            through: { attributes: [] } // Esto excluye los atributos de la tabla intermedia
+            through: { attributes: [] },
+            paranoid: false  // Esto excluye los atributos de la tabla intermedia
         }]
     });
     return medicalHistory ? (medicalHistory.toJSON()) : undefined;
@@ -39,7 +41,8 @@ public async findOne(medicalHistoryId: { id: string }): Promise<MedicalHistory |
         where: { id: id },
         include: [{
             model: VaccineModel,
-            through: { attributes: [] } // Esto excluye los atributos de la tabla intermedia
+            through: { attributes: [] },
+            paranoid: false  // Esto excluye los atributos de la tabla intermedia
         }]
     });
     return medicalHistory ? (medicalHistory.toJSON()) : undefined;

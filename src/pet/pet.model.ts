@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/connection.js';
+import { Client } from '../client/client.model.js';
 
 interface PetAttributes{
     id?:number
@@ -71,10 +72,12 @@ Pet.init(
       }
     },
     {
+      sequelize,
+      paranoid: true,
+      deletedAt: 'destroyTime',
       timestamps: true, // Habilita createdAt y updatedAt
       modelName: 'Pet', // Nombre del modelo
       tableName: 'pets', // Especifica el nombre de la tabla
-      sequelize, // Asegúrate de pasar la instancia de Sequelize
+       // Asegúrate de pasar la instancia de Sequelize
     }
-  );
-
+  )

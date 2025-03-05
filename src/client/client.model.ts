@@ -66,6 +66,8 @@ Client.init(
     },
     {
         sequelize,
+        paranoid: true,
+        deletedAt: 'destroyTime',
         modelName: 'Client',
         tableName: 'clients',
         timestamps: true, // Habilita createdAt y updatedAt
