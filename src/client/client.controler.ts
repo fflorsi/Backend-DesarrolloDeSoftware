@@ -37,7 +37,7 @@ async function findOne(req: Request, res: Response) {
   }
   const client = await repository.findOne({ id: id.toString() });
   if (!client) {
-    return res.status(404).send({ message: 'Client not found findOne' });
+    return res.status(404).send({ message: 'Client not found' });
   }
   res.json({ data: client });
 }
@@ -103,7 +103,7 @@ async function findClientAndPetsByDni(req: Request, res: Response) {
   try {
     const client = await repository.findClientAndPetsByDni(dni as string);
     if (!client) {
-      return res.status(404).send({ message: 'Client not found client' });
+      return res.status(404).send({ message: 'Client not found' });
     }
     if (!client.id) {
       return res.status(404).send({ message: 'Client ID is undefined' });

@@ -65,8 +65,7 @@ export class ClientRepository {
   // Obtener un cliente y sus mascotas por DNI
   public async findClientAndPetsByDni(dni: string): Promise<ClientInterface | null> {
     const client = await ClientModel.findOne({ 
-      where: { dni }, 
-      include: ['pets'] 
+      where: { dni: dni }
     });
     return client ? (client.toJSON() as ClientInterface) : null; // Manejo de null
   }
