@@ -72,3 +72,4 @@ Professional.init(
         timestamps: true, // Habilita createdAt y updatedAt
     }
 );
+

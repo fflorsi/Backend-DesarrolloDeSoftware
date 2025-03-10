@@ -10,14 +10,14 @@ describe('Professional Repository', () => {
     })
 
     it('debería agregar un nuevo profesional', async () => {
-        const newProfessional = new Professional('12345678', 'Lopez', 'Maria', 'Av. Libertador 1000', '341987654321', 'marialopez@gmail.com', new Date('1985-05-05')
+        const newProfessional = new Professional('09876543', 'Lopez', 'Mariana', 'Av. Libertador 2100', '34718277612', 'marianitalopez21889@gmail.com', new Date('1995-05-05')
         )
         const result = await repository.add(newProfessional)
         if (result.professional.id) {
             professionalId = result.professional.id
         }
         expect(result.professional).toHaveProperty('id')
-        expect(result.professional.firstname).toBe('Maria')
+        expect(result.professional.firstname).toBe('Mariana')
     })
 
     it('debería encontrar todos los profesionales', async () => {
@@ -31,14 +31,14 @@ describe('Professional Repository', () => {
     })
 
     it('debería actualizar un profesional', async () => {
-        const updatedProfessional = new Professional('87654321', 'Gonzalez', 'Juan', 'Calle Falsa 123', '341123456789', 'juangonzalez@gmail.com', new Date('1990-01-01')
+        const updatedProfessional = new Professional('432423112', 'Gonzalez', 'Peter', 'Calle Falsa 12334', '32432423432', 'juanccgonzalez8998@gmail.com', new Date('1990-02-01')
         )
-        const result = await repository.update(professionalId.toString(), updatedProfessional)
-        expect(result).toHaveProperty('firstname', 'Juan')
+        const result = await repository.update((professionalId.toString()), updatedProfessional)
+        expect(result).toHaveProperty('firstname', 'Peter')
     })
 
     it('debería eliminar un profesional', async () => {
-        const result = await repository.delete({ id: professionalId.toString() })
+        const result = await repository.delete({ id: (professionalId.toString()) })
         expect(result).toHaveProperty('id', professionalId)
     })
 })

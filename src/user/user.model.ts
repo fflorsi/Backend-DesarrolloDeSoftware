@@ -62,9 +62,7 @@ User.init(
         }
     },
     {
-        sequelize, 
-        paranoid: true,
-        deletedAt: 'destroyTime',
+        sequelize,
         modelName: 'User ', // Nombre del modelo
         tableName: 'users', // Nombre de la tabla
         timestamps: true // Habilita createdAt y updatedAt

@@ -54,10 +54,10 @@ describe('API Integration Tests', () => {
       .send({
         dni: '21019382',
         lastname: 'Dominguez',
-        firstname: 'Laura',
+        firstname: 'Estefania',
         address: 'Av. Libertador 1000',
         phone: 3413099211,
-        email: 'lauradominguez1@gmail.com',
+        email: 'estefaniadominguez1998@gmail.com',
         birthDate: '1995-05-05',
       })
 
