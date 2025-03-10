@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/connection.js';
+import { User } from '../user/user.model.js';
 
 // Define los atributos del cliente
 interface ClientAttributes {
@@ -72,4 +73,7 @@ Client.init(
         tableName: 'clients',
         timestamps: true, // Habilita createdAt y updatedAt
     }
-);
+)
+
+Client.hasOne(User, { foreignKey: 'clientId' });
+User.belongsTo(Client, { foreignKey: 'clientId' });
