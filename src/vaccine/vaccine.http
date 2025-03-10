@@ -1,0 +1,33 @@
+### obtener todas las observations de observations
+GET http://localhost:3000/api/vaccines
+
+### Obtener una observation de observations 
+GET http://localhost:3000/api/vaccines/2
+
+
+###Crear nueva observation en observations 
+POST http://localhost:3000/api/vaccines
+Content-Type: application/json
+
+{
+    "name": "Antigripal"
+}
+
+### Modificar una observation 
+PUT http://localhost:3000/api/vaccines/7
+Content-Type: application/json
+
+{
+    "name": "Antigripal 1"
+}
+
+### Modificar una observation 
+//PATCH  http://localhost:3000/api/vaccines/2
+//Content-Type: application/json
+
+//{
+  //  "name": "Antirrábica"
+//}
+
+### Borrar una vacuna 
+DELETE http://localhost:3000/api/vaccines/7

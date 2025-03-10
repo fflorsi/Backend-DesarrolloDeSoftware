@@ -1,0 +1,47 @@
+### obtener todos los characters
+GET http://localhost:3000/api/medicalHistory
+
+### obtener un character
+
+GET http://localhost:3000/api/medicalHistory/8
+
+### crear un nuevo character
+POST http://localhost:3000/api/medicalHistory
+Content-Type: application/json
+
+{
+    "petId": 4
+}
+
+###modificar un  character  (PUT)
+PUT http://localhost:3000/api/medicalHistory/1
+Content-Type: application/json
+
+{
+    "petId": 2
+}
+
+###modificar un  character parcialmente (PATCH)
+PATCH http://localhost:3000/api/medicalHistory/1
+Content-Type: application/json
+
+{
+    "vaccines": [1,2,3,4]
+}
+
+###borrar un character
+
+DELETE http://localhost:3000/api/medicalHistory/4
+
+
+###
+POST http://localhost:3000/api/medicalHistory/4/vaccines
+
+Content-Type: application/json
+
+{
+    "vaccineId": 3
+}
+
+###
+DELETE http://localhost:3000/api/medicalHistory/7/vaccines?vaccineId=2

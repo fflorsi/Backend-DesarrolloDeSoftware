@@ -1,0 +1,44 @@
+### obtener todas las observations de observations
+GET http://localhost:3000/api/observation
+
+### Obtener una observation de observations 
+GET http://localhost:3000/api/observation/1
+
+
+###
+GET http://localhost:3000/api/observation/byMedicalHistory/1
+
+###Crear nueva observation en observations 
+POST http://localhost:3000/api/observation
+Content-Type: application/json
+
+{
+    "name": "Observacion 3",
+    "professional": 1,
+    "description": "Se detectaron problemas en rodilla",
+    "medicalHistoryId": 1 
+}
+
+### Modificar una observation 
+PUT http://localhost:3000/api/observation/1
+Content-Type: application/json
+
+{
+    "name": "Tendiditis",
+    "professional": 1,
+    "description": "Nueva descripcion",
+    "medicalHistoryId": 1 
+}
+
+### Modificar una observation 
+PATCH  http://localhost:3000/api/observation/1
+Content-Type: application/json
+
+{
+    "name": "apendicitis",
+    "description": "removal of the apendix",
+    "datePerformed": "01/06/2024"
+}
+
+### Borrar una observation 
+DELETE http://localhost:3000/api/observation/2
