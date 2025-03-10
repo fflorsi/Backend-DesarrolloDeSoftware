@@ -56,6 +56,7 @@ export const createOrder = async(req: Request, res: Response) => {
 export const savePayment = async (req: Request, res: Response) => {
     // in: paymentId
     const paymentId = req.params.paymentId
+    const clientId = req.body.clientId
 
     try {
         // Traigo info del pago
@@ -94,7 +95,7 @@ export const savePayment = async (req: Request, res: Response) => {
           id: orderData.id,
           total: orderData.total_amount,
           date: paymentData.date_approved,
-          clientId: req.body.clientId,
+          clientId: clientId,
           paymentId: paymentData.id
     })
 
