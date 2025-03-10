@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/connection.js';
 import { Client } from '../client/client.model.js';
+import { Type } from '../types/type.model.js';
 
 interface PetAttributes{
     id?:number
@@ -81,3 +82,6 @@ Pet.init(
        // Asegúrate de pasar la instancia de Sequelize
     }
   )
+
+  Type.hasMany(Pet, { foreignKey: 'id' });
+  Pet.belongsTo(Type, { foreignKey: 'type' });

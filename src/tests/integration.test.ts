@@ -1,12 +1,12 @@
 import request from 'supertest';
-import { app } from '../app'; // Asegúrate de que la ruta a tu app sea correcta
+import { app } from '../app';
 
 describe('API Integration Tests', () => {
-  let clientId: number;
-  let petId: number;
-  let professionalId: number;
-  let facilityId: number;
-  let productId: number;
+  let clientId: number
+  let petId: number
+  let professionalId: number
+  let facilityId: number
+  let productId: number
 
   // Test para crear un cliente
   it('debe crear un cliente', async () => {
@@ -52,13 +52,13 @@ describe('API Integration Tests', () => {
     const response = await request(app)
       .post('/api/professionals')
       .send({
-        dni: '18293741',
-        lastname: 'Lopez',
-        firstname: 'Maria',
+        dni: '21019382',
+        lastname: 'Dominguez',
+        firstname: 'Laura',
         address: 'Av. Libertador 1000',
-        phone: 341987654321,
-        email: 'marialopez@gmail.com',
-        birthDate: '1985-05-05',
+        phone: 3413099211,
+        email: 'lauradominguez1@gmail.com',
+        birthDate: '1995-05-05',
       })
 
     expect(response.status).toBe(201)

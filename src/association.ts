@@ -15,14 +15,11 @@ Appointment.belongsTo(Pet, { foreignKey: 'petId' });
 Professional.hasMany(Appointment, { foreignKey: 'professionalId' });
 Appointment.belongsTo(Professional, { foreignKey: 'professionalId' });
 
-Professional.hasMany(Observation, {foreignKey: 'professional', as:'Observations'} )
-Observation.belongsTo(Professional, {foreignKey: 'professional', as: 'professionalData'})
 
 Facility.hasMany(Appointment, { foreignKey: 'facilityId' });
 Appointment.belongsTo(Facility, { foreignKey: 'facilityId' });
 
-Type.hasMany(Pet, { foreignKey: 'id' });
-Pet.belongsTo(Type, { foreignKey: 'type' });
+
 
 Order.hasMany(OrderItem, {
     foreignKey: 'orderId',

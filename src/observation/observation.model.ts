@@ -1,5 +1,6 @@
 import { DataTypes,Model,Optional } from 'sequelize';
 import sequelize from '../db/connection.js';
+import { Professional } from '../professional/professional.model.js';
 
 
 interface ObservationAttributes{
@@ -60,4 +61,7 @@ Observation.init(
       sequelize, // Asegúrate de pasar la instancia de Sequelize
     }
   );
+
+Professional.hasMany(Observation, {foreignKey: 'professional', as:'Observations'} )
+Observation.belongsTo(Professional, {foreignKey: 'professional', as: 'professionalData'})
 
