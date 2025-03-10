@@ -94,7 +94,7 @@ export const savePayment = async (req: Request, res: Response) => {
           id: orderData.id,
           total: orderData.total_amount,
           date: paymentData.date_approved,
-          clientId: paymentData.payer.identification.number,
+          clientId: req.body.clientId,
           paymentId: paymentData.id
     })
 
