@@ -34,3 +34,5 @@ Sigue los siguientes pasos para clonar y ejecutar este proyecto en tu entorno lo
 
    ```bash
    http://localhost:3000
+
+[![OpenAPI](https://img.shields.io/badge/OpenAPI-Documentation-brightgreen)](https://petstore.swagger.io/?url=http://localhost:3000/docs/openapi.yaml)
