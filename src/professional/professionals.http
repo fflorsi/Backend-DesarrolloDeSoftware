@@ -11,11 +11,11 @@ Content-Type: application/json
 {
     "dni": "12325478",
     "lastname": "hola",
-    "name": "flor Maria",
-    "adress": "El micasa",
-    "phone_number": 12345678,
-    "mail": "jmtraverso@gmail.com",
-    "birthdate":"28/12/1950"
+    "firstname": "flor Maria",
+    "address": "El micasa",
+    "phone": 12345678,
+    "email": "jmtraverso@gmail.com",
+    "birthDate":"1950-05-06"
 }
 
 ### Modificar un professional (put - recurso completo e idempotente) - FUNCIONA CON ID

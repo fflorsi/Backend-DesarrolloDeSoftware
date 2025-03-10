@@ -91,7 +91,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
     const { id } = req.params;
     const professional = await repository.delete({ id });
-
+    
     if (!professional) {
         return res.status(404).send({ message: 'Professional not found' });
         }

@@ -93,7 +93,8 @@ export class ProfessionalRepository {
         const professionalToDelete = await this. findOne(item);
         if (!professionalToDelete) return null;
         await ProfessionalModel.destroy({where:{id: professionalToDelete.id}});
-            return professionalToDelete
+        await User.destroy({where:{professionalId : professionalToDelete.id}})
+        return professionalToDelete
         }
     }
 
